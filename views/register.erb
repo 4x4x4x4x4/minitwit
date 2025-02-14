@@ -1,0 +1,21 @@
+<!-- views/register.erb -->
+<h2>Register</h2>
+<% if @error %>
+  <div class="error"><strong>Error:</strong> <%= @error %></div>
+<% end %>
+<form action="/register" method="post">
+  <dl>
+    <dt>Username:</dt>
+    <dd><input type="text" name="username" value="<%= params[:username] %>"></dd>
+
+    <dt>Email:</dt>
+    <dd><input type="email" name="email" value="<%= params[:email] %>"></dd>
+
+    <dt>Password:</dt>
+    <dd><input type="password" name="password"></dd>
+
+    <dt>Confirm Password:</dt>
+    <dd><input type="password" name="password2"></dd>
+  </dl>
+  <div><input type="submit" value="Register"></div>
+</form> 
