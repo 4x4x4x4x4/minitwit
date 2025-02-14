@@ -1,5 +1,5 @@
 <% if @user %>
-  <% if request.path_info == '/:username' %>
+  <% if @profile_user %>
     <div class="followstatus">
       <% if @user['user_id'] == @profile_user['user_id'] %>
         This is you!

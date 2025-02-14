@@ -144,6 +144,13 @@ get '/:username' do
     [@profile_user['user_id'], PER_PAGE]
   )
 
+  @followed = false
+  if logged_in?
+    result = @db.execute("SELECT 1 FROM follower WHERE who_id = ? AND whom_id = ?", 
+                         [session[:user_id], @profile_user['user_id']])
+    @followed = !result.empty?
+  end
+
   erb :timeline
 end
 
