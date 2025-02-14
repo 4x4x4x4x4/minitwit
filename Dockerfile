@@ -7,6 +7,6 @@ COPY . .
 
 RUN bundle install
 
-EXPOSE 9292
+EXPOSE 5000
 
-CMD ["rackup", "-o", "0.0.0.0", "-p", "9292"]
+CMD ["rackup", "-o", "0.0.0.0", "-p", "5000"]
