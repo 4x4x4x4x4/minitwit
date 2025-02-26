@@ -6,4 +6,6 @@ services:
     image: minitwit/webapp
     ports: 
       - "5000:5000"
+    volumes:
+      - .:/app
 
