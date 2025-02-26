@@ -5,6 +5,9 @@ require_relative 'helpers/auth_helper'
 require_relative 'helpers/view_helper'
 
 class MiniTwit < Sinatra::Base
+  # very important that this is loaded first 
+  use Rack::Static, urls: ["/style.css"]
+
   helpers AuthHelper
   helpers ViewHelper
 
