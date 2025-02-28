@@ -10,6 +10,16 @@ class APIController < Sinatra::Base
         SQLite3::Database.new('database/minitwit.db', results_as_hash: true)
     end
 
+    #Helper function to check authorization
+    def not_req_from_simulator(request)
+      from_simulator = request.env["HTTP_AUTHORIZATION"]
+      if from_simulator != "Basic c2ltdWxhdG9yOnN1cGVyX3NhZmUh"
+        error = "You are not authorized to use this resource!"
+        return [403, { "Content-Type" => "application/json" }, [{ status: 403, error_msg: error }.to_json]]
+      end
+      nil
+    end
+
     def get_user_id(username)
       @db.results_as_hash = true
       result = @db.execute("SELECT user_id FROM user WHERE username = ?", [username]).first
@@ -36,21 +46,21 @@ class APIController < Sinatra::Base
     @db.close if @db
   end
 
-  get '/api/latest' do
+  get '/latest' do
     content = File.read('./latest_processed_sim_action_id.txt') rescue '-1'
     latest_processed_command_id = content.to_i
     {latest: latest_processed_command_id }.to_json
   end
 
-  post '/api/register' do
+  post '/register' do
     update_latest(request)    
     content_type :json
-    
+
     # Parse JSON body
     request_payload = JSON.parse(request.body.read) rescue {}
 
-    params_values = [:username, :password, :password, :email].map { |param| params[param]&.strip }
-
+    params_values = ["username", "pwd", "pwd", "email"].map { |param| request_payload[param]&.strip }
+    
     # Assigning to individual variables
     username, password, password2, email = params_values
 
@@ -97,23 +107,27 @@ class APIController < Sinatra::Base
     end
   end
 
-  get '/api/msgs' do
+  get '/msgs' do
     update_latest(request)    
     content_type :json
     
+    not_from_sim_response = not_req_from_simulator(request)
+    if not_from_sim_response
+      return not_from_sim_response
+    end
+
     # Parse JSON body
     request_payload = JSON.parse(request.body.read) rescue {}
-    # !!!check for sim HERE!!!
-    #
-    params_values = [:no, :latest].map { |param| params[param]&.strip }
-    no, latest = params_values
+    
+    no = params[:no]&.strip
+    latest = params[:latest]&.strip
 
 
     begin
       query = "SELECT message.*, user.* FROM message, user
         WHERE message.flagged = 0 AND message.author_id = user.user_id
         ORDER BY message.pub_date DESC LIMIT ?"
-      msgs = @db.execute(query, [no.to_i])
+      msgs = @db.execute(query, [no ? no.to_i : 100]) #defaults no to 100
 
       filtered_msgs = []
       msgs.each do |msg|
@@ -128,18 +142,18 @@ class APIController < Sinatra::Base
     end
   end
 
-  get '/api/msgs/:username' do
+  get '/msgs/:username' do
     update_latest(request)    
     content_type :json
-    
-    # Parse JSON body
-    request_payload = JSON.parse(request.body.read) rescue {}
-    # !!!check for sim HERE!!!
-    #
-    params_values = [:no, :latest].map { |param| params[param]&.strip }
-    no, latest = params_values
-    user_id = get_user_id(params[:username])
 
+    not_from_sim_response = not_req_from_simulator(request)
+    if not_from_sim_response
+      return not_from_sim_response
+    end
+    
+    no = params[:no]&.strip
+    latest = params[:latest]&.strip
+    user_id = get_user_id(params[:username])
 
     begin
       query = "SELECT message.*, user.* FROM message, user
@@ -160,15 +174,18 @@ class APIController < Sinatra::Base
     end
   end
   
-  post '/api/msgs/:username' do
+  post '/msgs/:username' do
     update_latest(request)
     content_type :json
     
+    not_from_sim_response = not_req_from_simulator(request)
+    if not_from_sim_response
+      return not_from_sim_response
+    end
+    
     # Parse JSON body
     request_payload = JSON.parse(request.body.read) rescue {}
-    # !!!check for sim HERE!!!
-    #
-    content = params[:content]&.strip
+    content = request_payload["content"]&.strip
     user_id = get_user_id(params[:username])
 
     query = "INSERT INTO message (author_id, text, pub_date, flagged)
@@ -177,10 +194,21 @@ class APIController < Sinatra::Base
     @db.execute(query, [user_id, content, Time.now.to_i])
   end
 
-  get '/api/fllws/:username' do
-    params_values = [:no, :latest].map { |param| params[param]&.strip }
-    no, latest = params_values
+  get '/fllws/:username' do
+    update_latest(request)
+    content_type :json
+    
+    not_from_sim_response = not_req_from_simulator(request)
+    if not_from_sim_response
+      return not_from_sim_response
+    end
+
+    latest = params[:latest]
     user_id = get_user_id(params[:username])
+
+    request_payload = JSON.parse(request.body.read) rescue {}
+    no = request_payload["content"]&.strip
+
 
     query = "SELECT user.username FROM user
                    INNER JOIN follower ON follower.whom_id=user.user_id
@@ -193,18 +221,28 @@ class APIController < Sinatra::Base
     followers_response.to_json
   end
 
-  post '/api/fllws/:username' do
+  post '/fllws/:username' do
+    update_latest(request)
+    content_type :json
+    
+    not_from_sim_response = not_req_from_simulator(request)
+    if not_from_sim_response
+      return not_from_sim_response
+    end
+
     user_id = get_user_id(params[:username])
     if user_id.nil?
       halt 404
     end
 
-    if params.key?("follow") 
+    request_payload = JSON.parse(request.body.read) rescue {}
+
+    if request_payload.key?("follow") 
       query = "INSERT INTO follower (who_id, whom_id) VALUES (?, ?)"
-      fllw_id = get_user_id(params[:follow])
-    elsif params.key?("unfollow")
+      fllw_id = get_user_id(request_payload["follow"]&.strip)
+    elsif request_payload.key?("unfollow")
       query = "DELETE FROM follower WHERE who_id=? and WHOM_ID=?"
-      fllw_id = get_user_id(params[:unfollow])
+      fllw_id = get_user_id(request_payload["unfollow"]&.strip)
     end
     
     if fllw_id.nil?

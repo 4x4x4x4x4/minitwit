@@ -35,12 +35,12 @@ class AuthController < Sinatra::Base
   end
 
   # Register
-  get '/register' do
+  get '/t/register' do
     redirect '/' if logged_in?
     erb :register
   end
 
-  post '/register' do
+  post '/t/register' do
     if params[:password] != params[:password2]
       @error = "Passwords do not match"
       erb :register

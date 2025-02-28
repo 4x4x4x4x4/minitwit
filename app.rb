@@ -12,9 +12,9 @@ class MiniTwit < Sinatra::Base
   helpers AuthHelper
   helpers ViewHelper
 
+  use APIController
   use AuthController
   use TimelineController
-  use APIController
 
   get '/' do
     redirect '/public'
