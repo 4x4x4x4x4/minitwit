@@ -11,10 +11,8 @@ class APIController < Sinatra::Base
     end
 
     def get_user_id(username)
-      db = db_connection
-      db.results_as_hash = true
-      result = db.execute("SELECT user_id FROM user WHERE username = ?", [username]).first
-      db.close
+      @db.results_as_hash = true
+      result = @db.execute("SELECT user_id FROM user WHERE username = ?", [username]).first
       result ? result['user_id'] : nil
     end  
 
@@ -27,10 +25,10 @@ class APIController < Sinatra::Base
         end
     end
 
+
   end
 
   before do
-    content_type :json
     @db = db_connection
   end
 
@@ -97,5 +95,122 @@ class APIController < Sinatra::Base
     rescue SQLite3::Exception => e
       halt 500, { error: "Database error: #{e.message}" }.to_json
     end
+  end
+
+  get '/api/msgs' do
+    update_latest(request)    
+    content_type :json
+    
+    # Parse JSON body
+    request_payload = JSON.parse(request.body.read) rescue {}
+    # !!!check for sim HERE!!!
+    #
+    params_values = [:no, :latest].map { |param| params[param]&.strip }
+    no, latest = params_values
+
+
+    begin
+      query = "SELECT message.*, user.* FROM message, user
+        WHERE message.flagged = 0 AND message.author_id = user.user_id
+        ORDER BY message.pub_date DESC LIMIT ?"
+      msgs = @db.execute(query, [no.to_i])
+
+      filtered_msgs = []
+      msgs.each do |msg|
+        filtered_msg = {}
+        filtered_msg["content"] = msg["text"]
+        filtered_msg["pub_date"] = msg["pub_date"]
+        filtered_msg["user"] = msg["username"]
+        filtered_msgs << filtered_msg
+      end
+
+      filtered_msgs.to_json #returns
+    end
+  end
+
+  get '/api/msgs/:username' do
+    update_latest(request)    
+    content_type :json
+    
+    # Parse JSON body
+    request_payload = JSON.parse(request.body.read) rescue {}
+    # !!!check for sim HERE!!!
+    #
+    params_values = [:no, :latest].map { |param| params[param]&.strip }
+    no, latest = params_values
+    user_id = get_user_id(params[:username])
+
+
+    begin
+      query = "SELECT message.*, user.* FROM message, user
+        WHERE message.flagged = 0 AND message.author_id = user.user_id AND user.user_id = ?
+        ORDER BY message.pub_date DESC LIMIT ?"
+      msgs = @db.execute(query, [user_id, no.to_i])
+
+      filtered_msgs = []
+      msgs.each do |msg|
+        filtered_msg = {}
+        filtered_msg["content"] = msg["text"]
+        filtered_msg["pub_date"] = msg["pub_date"]
+        filtered_msg["user"] = msg["username"]
+        filtered_msgs << filtered_msg
+      end
+
+      filtered_msgs.to_json #returns
+    end
+  end
+  
+  post '/api/msgs/:username' do
+    update_latest(request)
+    content_type :json
+    
+    # Parse JSON body
+    request_payload = JSON.parse(request.body.read) rescue {}
+    # !!!check for sim HERE!!!
+    #
+    content = params[:content]&.strip
+    user_id = get_user_id(params[:username])
+
+    query = "INSERT INTO message (author_id, text, pub_date, flagged)
+                   VALUES (?, ?, ?, 0)"
+    
+    @db.execute(query, [user_id, content, Time.now.to_i])
+  end
+
+  get '/api/fllws/:username' do
+    params_values = [:no, :latest].map { |param| params[param]&.strip }
+    no, latest = params_values
+    user_id = get_user_id(params[:username])
+
+    query = "SELECT user.username FROM user
+                   INNER JOIN follower ON follower.whom_id=user.user_id
+                   WHERE follower.who_id=?
+                   LIMIT ?"
+
+    followers = @db.execute(query, [user_id, no ? no.to_i : 100]) #if no was not set default to 100
+    follower_names = followers.map { |e| e["username"] }
+    followers_response = {"follows": follower_names}
+    followers_response.to_json
+  end
+
+  post '/api/fllws/:username' do
+    user_id = get_user_id(params[:username])
+    if user_id.nil?
+      halt 404
+    end
+
+    if params.key?("follow") 
+      query = "INSERT INTO follower (who_id, whom_id) VALUES (?, ?)"
+      fllw_id = get_user_id(params[:follow])
+    elsif params.key?("unfollow")
+      query = "DELETE FROM follower WHERE who_id=? and WHOM_ID=?"
+      fllw_id = get_user_id(params[:unfollow])
+    end
+    
+    if fllw_id.nil?
+      halt 404
+    end
+    status 204
+    @db.execute(query, [user_id, fllw_id])
   end
 end
