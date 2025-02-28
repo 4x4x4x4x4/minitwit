@@ -1,0 +1,32 @@
+name: Auto Versioning
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history and tags
+
+      - name: Get Latest Tag and Increment
+        run: |
+          latest_tag=$(git tag --sort=-v:refname | head -n 1)
+          if [[ -z "$latest_tag" ]]; then
+            new_version="v1.0.0"
+          else
+            new_version=$(echo $latest_tag | awk -F. '{print $1"."$2"."$3+1}')
+          fi
+          echo "New Version: $new_version"
+
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git tag $new_version
+          git push origin $new_version
+
