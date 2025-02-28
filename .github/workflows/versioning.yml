@@ -23,10 +23,21 @@ jobs:
           else
             new_version=$(echo $latest_tag | awk -F. '{print $1"."$2"."$3+1}')
           fi
+          
+          # Add branch name to version (optional)
+          branch_name="${GITHUB_REF##*/}"  # Extract the branch name
+          if [[ "$branch_name" != "main" ]]; then
+            new_version="${new_version}-${branch_name}"
+          fi
+          
           echo "New Version: $new_version"
+          echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
 
+      - name: Push New Tag
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}  # Use the secret for authentication
+        run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
-          git tag $new_version
-          git push origin $new_version
-
+          git tag $NEW_VERSION
+          git push https://x-access-token:$GH_PAT@github.com/${{ github.repository }}.git $NEW_VERSION
