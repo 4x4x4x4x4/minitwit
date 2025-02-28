@@ -33,6 +33,16 @@ jobs:
           echo "New Version: $new_version"
           echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
 
+      - name: Debugging Information (Before Push)
+        run: |
+          echo "Using the following Git configuration:"
+          git config --list
+          echo "User name: $(git config user.name)"
+          echo "User email: $(git config user.email)"
+          echo "GitHub repository: ${{ github.repository }}"
+          echo "Token is set: ${GH_PAT:0:4}... (first 4 chars)"
+          echo "New Version: $NEW_VERSION"
+
       - name: Push New Tag
         env:
           GH_PAT: ${{ secrets.GH_PAT }}  # Use the PAT secret for authentication
@@ -41,7 +51,8 @@ jobs:
           git config --global user.email "github-actions@github.com"
           git tag $NEW_VERSION
 
+          # Debugging: print out token length (for security reasons, do not expose the full token)
+          echo "Pushing with PAT: ${GH_PAT:0:4}..."
+
           # Use the PAT for authentication when pushing the tag
           git push https://x-access-token:$GH_PAT@github.com/${{ github.repository }}.git $NEW_VERSION
-      
-      
