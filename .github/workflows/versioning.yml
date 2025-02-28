@@ -35,11 +35,12 @@ jobs:
 
       - name: Push New Tag
         env:
-          GH_PAT: ${{ secrets.GH_PAT }}  # Use the secret for authentication
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Use GitHub's automatic token
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
           git tag $NEW_VERSION
 
-          # Use Personal Access Token (PAT) to push the tag
-          git push https://x-access-token:$GH_PAT@github.com/${{ github.repository }}.git $NEW_VERSION
+          # Use the GitHub token for authentication
+          git push https://x-access-token:$GITHUB_TOKEN@github.com/${{ github.repository }}.git $NEW_VERSION
+      
