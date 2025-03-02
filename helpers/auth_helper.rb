@@ -6,6 +6,15 @@ module AuthHelper
     SQLite3::Database.new('database/minitwit.db', results_as_hash: true)
   end
 
+  def init_db
+    db = SQLite3::Database.new 'database.db'
+  
+    # Open the schema.sql file and execute the SQL script
+    File.open('schema.sql', 'r') do |file|
+      db.execute_batch(file.read)
+    end
+  end
+
   def logged_in?
     !!session[:user_id]
   end
