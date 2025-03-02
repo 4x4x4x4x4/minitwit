@@ -46,13 +46,13 @@ class APIController < Sinatra::Base
     @db.close if @db
   end
 
-  get '/latest' do
+  get '/api/latest' do
     content = File.read('./latest_processed_sim_action_id.txt') rescue '-1'
     latest_processed_command_id = content.to_i
     {latest: latest_processed_command_id }.to_json
   end
 
-  post '/register' do
+  post '/api/register' do
     update_latest(request)    
     content_type :json
 
@@ -107,7 +107,7 @@ class APIController < Sinatra::Base
     end
   end
 
-  get '/msgs' do
+  get '/api/msgs' do
     update_latest(request)    
     content_type :json
     
@@ -142,7 +142,7 @@ class APIController < Sinatra::Base
     end
   end
 
-  get '/msgs/:username' do
+  get '/api/msgs/:username' do
     update_latest(request)    
     content_type :json
 
@@ -174,7 +174,7 @@ class APIController < Sinatra::Base
     end
   end
   
-  post '/msgs/:username' do
+  post '/api/msgs/:username' do
     update_latest(request)
     content_type :json
     
@@ -194,7 +194,7 @@ class APIController < Sinatra::Base
     @db.execute(query, [user_id, content, Time.now.to_i])
   end
 
-  get '/fllws/:username' do
+  get '/api/fllws/:username' do
     update_latest(request)
     content_type :json
     
@@ -221,7 +221,7 @@ class APIController < Sinatra::Base
     followers_response.to_json
   end
 
-  post '/fllws/:username' do
+  post '/api/fllws/:username' do
     update_latest(request)
     content_type :json
     
