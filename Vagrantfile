@@ -12,7 +12,7 @@ Vagrant.configure("2") do |config|
   #########################
   # Database Server Setup #
   #########################
-  config.vm.define "dbserver", primary: true do |db|
+  config.vm.define "dbserver", primary: false do |db|
     db.vm.provider :digital_ocean do |provider|
       provider.ssh_key_name = ENV["SSH_KEY_NAME"]
       provider.token = ENV["DIGITAL_OCEAN_TOKEN"]
@@ -33,10 +33,6 @@ Vagrant.configure("2") do |config|
     end
 
     db.vm.provision "shell", inline: <<-SHELL
-      while sudo fuser /var/lib/dpkg/lock >/dev/null 2>&1; do
-        echo "Waiting for dpkg lock to be released..."
-        sleep 5
-      done
       sudo apt-get update -y
       sudo apt-get install -y sqlite3 libsqlite3-dev
       echo "SQLite setup complete on dbserver"
@@ -46,7 +42,7 @@ Vagrant.configure("2") do |config|
   ##########################
   # Web Application Server #
   ##########################
-  config.vm.define "webserver", primary: false do |web|
+  config.vm.define "webserver", primary: true do |web|
     web.vm.provider :digital_ocean do |provider|
       provider.ssh_key_name = ENV["SSH_KEY_NAME"]
       provider.token = ENV["DIGITAL_OCEAN_TOKEN"]
@@ -71,25 +67,13 @@ Vagrant.configure("2") do |config|
     end
 
     web.vm.provision "shell", inline: <<-SHELL
-      # Wait for apt-get lock to be released
-      while sudo fuser /var/lib/dpkg/lock >/dev/null 2>&1; do
-        echo "Waiting for dpkg lock to be released..."
-        sleep 5
-      done
-
-      # Install dependencies
+      # Install Docker and Docker Compose
       sudo apt-get update -y
-      sudo apt-get install -y curl gnupg
+      sudo apt-get install -y docker.io docker-compose
 
-      # Install Docker
-      curl -fsSL https://get.docker.com -o get-docker.sh
-      sudo sh get-docker.sh
-      sudo usermod -aG docker $USER
-
-      # Install Docker Compose
-      sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-      sudo chmod +x /usr/local/bin/docker-compose
-      docker-compose --version
+      # Ensure Docker service is running
+      sudo systemctl start docker
+      sudo systemctl enable docker
 
       # Navigate to the synced project folder
       cd /vagrant
