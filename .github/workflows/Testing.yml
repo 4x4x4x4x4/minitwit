@@ -40,10 +40,14 @@ jobs:
       # Step 4: Set up Docker Compose
       - name: Set up Docker Compose
         run: |
-          DOCKER_COMPOSE_VERSION="1.29.2"  # You can adjust this to your preferred version
+          DOCKER_COMPOSE_VERSION="1.29.2"  # Adjust this to your preferred version
+          # Download the Docker Compose binary for your OS/architecture
           curl -L https://github.com/docker/compose/releases/download/v$DOCKER_COMPOSE_VERSION/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
-          chmod +x /usr/local/bin/docker-compose
+          # Ensure the binary is executable
+          sudo chmod +x /usr/local/bin/docker-compose
+          # Check if the docker-compose command works
           docker-compose --version  # Verify Docker Compose installation
+      
 
       # Step 5: Build and start services with Docker Compose
       - name: Build and start services with Docker Compose
