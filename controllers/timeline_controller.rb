@@ -54,8 +54,8 @@ class TimelineController < Sinatra::Base
     if params[:text] && !params[:text].empty?
       @db.execute("INSERT INTO message (author_id, text, pub_date, flagged) VALUES (?, ?, ?, 0)", 
                   [session[:user_id], params[:text], Time.now.to_i])
-    end
-    
+      session[:success_message] = "Your message was recorded"
+    end    
     redirect '/'
   end
 
@@ -90,6 +90,7 @@ class TimelineController < Sinatra::Base
     halt 404 unless whom_id
 
     @db.execute("INSERT INTO follower (who_id, whom_id) VALUES (?, ?)", [session[:user_id], whom_id['user_id']])
+    session[:success_message] = "You are now following &#34;#{params[:username]}&#34;"
     redirect "/#{params[:username]}"
   end
 
@@ -101,6 +102,7 @@ class TimelineController < Sinatra::Base
     halt 404 unless whom_id
 
     @db.execute("DELETE FROM follower WHERE who_id = ? AND whom_id = ?", [session[:user_id], whom_id['user_id']])
+    session[:success_message] = "You are no longer following &#34;#{params[:username]}&#34;"
     redirect "/#{params[:username]}"
   end
 end

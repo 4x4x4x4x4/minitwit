@@ -15,7 +15,7 @@ import requests
 # import schema
 # import data
 # otherwise use the database that you got previously
-BASE_URL = "http://localhost:5000"
+BASE_URL = "http://localhost:5001"
 
 def register(username, password, password2=None, email=None):
     """Helper function to register a user"""
@@ -106,7 +106,7 @@ def test_timelines():
     assert 'the message by bar' in r.text
 
     # bar's timeline should just show bar's message
-    r = http_session.get(f'{BASE_URL}/')
+    r = http_session.get(f'{BASE_URL}/bar')
     assert 'the message by foo' not in r.text
     assert 'the message by bar' in r.text
 
