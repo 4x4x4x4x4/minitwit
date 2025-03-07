@@ -3,7 +3,7 @@ name: Auto Versioning
 on:
   push:
     branches:
-      - version-workflow  # Trigger only on this branch
+      - ConvertToRuby  # Trigger only on this branch
 
 jobs:
   version:
