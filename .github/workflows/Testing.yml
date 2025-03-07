@@ -14,15 +14,30 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Step 2: Set up Docker
-      - name: Set up Docker
+      # Step 2: Clean up Docker packages
+      - name: Clean up Docker packages
+        run: |
+          sudo apt-get remove --purge docker docker-engine docker.io containerd containerd.io
+          sudo apt-get autoremove -y
+          sudo apt-get clean
+
+      # Step 3: Set up Docker (using the official method)
+      - name: Install Docker
         run: |
           sudo apt-get update
-          sudo apt-get install -y docker.io
+          sudo apt-get install -y \
+            apt-transport-https \
+            ca-certificates \
+            curl \
+            software-properties-common
+          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo tee /etc/apt/trusted.gpg.d/docker.asc
+          sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+          sudo apt-get update
+          sudo apt-get install -y docker-ce docker-ce-cli containerd.io
           sudo systemctl start docker
           sudo systemctl enable docker
 
-      # Step 3: Set up Docker Compose
+      # Step 4: Set up Docker Compose
       - name: Set up Docker Compose
         run: |
           DOCKER_COMPOSE_VERSION="1.29.2"  # You can adjust this to your preferred version
@@ -30,12 +45,12 @@ jobs:
           chmod +x /usr/local/bin/docker-compose
           docker-compose --version  # Verify Docker Compose installation
 
-      # Step 4: Build and start services with Docker Compose
+      # Step 5: Build and start services with Docker Compose
       - name: Build and start services with Docker Compose
         run: |
           docker-compose up -d  # Start services in detached mode
 
-      # Step 5: Install Python dependencies
+      # Step 6: Install Python dependencies
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
@@ -43,7 +58,7 @@ jobs:
           pip install requests
           pip install flask
 
-      # Step 6: Run tests with pytest
+      # Step 7: Run tests with pytest
       - name: Run tests with pytest
         run: |
           pytest refactored_minitwit_tests.py
@@ -51,7 +66,7 @@ jobs:
           FRONTEND_URL: "http://localhost:5001"  # URL of your Sinatra app running in Docker
           RACK_ENV: test  # Set environment variable for Sinatra app if needed
 
-      # Step 7: Stop and remove Docker containers
+      # Step 8: Stop and remove Docker containers
       - name: Stop and remove Docker containers
         run: |
           docker-compose down
