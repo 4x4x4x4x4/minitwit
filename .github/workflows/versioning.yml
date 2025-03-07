@@ -19,6 +19,7 @@ jobs:
           if [[ -z "$latest_tag" ]]; then
             new_version="v1.0.0"
           else
+            # Increment the patch version (or change the logic to your preference)
             new_version=$(echo $latest_tag | awk -F. '{print $1"."$2"."$3+1}')
           fi
           
@@ -27,14 +28,14 @@ jobs:
           if [[ "$branch_name" != "main" ]]; then
             new_version="${new_version}-${branch_name}"
           fi
-          
+
           echo "New Version: $new_version"
           echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
 
       - name: Tag the new version
         run: |
           git tag $NEW_VERSION
-          git push origin $NEW_VERSION
+          git push origin $NEW_VERSION  # Push the tag to GitHub
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
