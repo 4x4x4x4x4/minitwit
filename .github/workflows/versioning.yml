@@ -37,6 +37,10 @@ jobs:
           git tag $NEW_VERSION
           git push origin $NEW_VERSION  # Push the tag to GitHub
 
+      - name: Fetch tags to ensure the new tag is recognized
+        run: |
+          git fetch --tags  # Make sure the tag is fetched before creating the release
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         env:
