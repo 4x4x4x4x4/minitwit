@@ -43,6 +43,12 @@ jobs:
           echo "Token is set: ${GH_PAT:0:4}... (first 4 chars)"
           echo "New Version: $NEW_VERSION"
 
+      - name: Configure Git User
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+
+
       - name: Push New Tag
         env:
           GH_PAT: ${{ secrets.GH_PAT }}  # Use the PAT secret for authentication
