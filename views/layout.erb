@@ -16,6 +16,16 @@
   </div>
 
   <div class="body">
+    <% if session[:success_message] %>
+      <div class="success"><%= session[:success_message] %></div>
+      <% session[:success_message] = nil %> <!-- Clear after displaying -->
+    <% end %>
+
+    <% if session[:error_message] %>
+      <div class="error"><strong>Error:</strong> <%= session[:error_message] %></div>
+      <% session[:error_message] = nil %> <!-- Clear after displaying -->
+    <% end %>
+
     <%= yield %>
   </div>
 

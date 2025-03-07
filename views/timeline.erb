@@ -35,7 +35,7 @@
               <%= message['username'] %>
             </a>
           </strong>
-          <%= message['text'] %>
+          <%= h(message['text']) %>
           <small>&mdash; <%= format_datetime(message['pub_date']) %></small>
         </p>
       </li>

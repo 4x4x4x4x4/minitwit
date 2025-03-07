@@ -10,4 +10,8 @@ module ViewHelper
   def format_datetime(timestamp)
     Time.at(timestamp.to_i).utc.strftime('%Y-%m-%d @ %H:%M')
   end
+
+  def h(text)
+    Rack::Utils.escape_html(text)
+  end
 end

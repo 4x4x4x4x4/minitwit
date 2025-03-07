@@ -15,6 +15,16 @@ module AuthHelper
     end
   end
 
+  def get_user_id(username)
+    @db.results_as_hash = true
+    result = @db.execute("SELECT user_id FROM user WHERE username = ?", [username]).first
+    result ? result['user_id'] : nil
+  end
+
+  def valid_email(email)
+    email.include?('@') ? true : false
+  end
+
   def logged_in?
     !!session[:user_id]
   end
