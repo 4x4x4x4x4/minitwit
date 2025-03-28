@@ -6,3 +6,4 @@ gem 'bcrypt'
 gem 'rack'
 gem 'puma'
 gem 'rackup'
+gem 'rubocop', require: false
