@@ -2,6 +2,8 @@ require 'sinatra'
 require 'sqlite3'
 require 'bcrypt'
 require 'json'
+require_relative '../helpers/db_helper'
+
 
 class APIController < Sinatra::Base
   
@@ -19,12 +21,6 @@ class APIController < Sinatra::Base
       end
       nil
     end
-
-    def get_user_id(username)
-      @db.results_as_hash = true
-      result = @db.execute("SELECT user_id FROM user WHERE username = ?", [username]).first
-      result ? result['user_id'] : nil
-    end  
 
     def update_latest(request)
         parsed_command_id = request.params.fetch('latest', -1).to_i
@@ -83,19 +79,16 @@ class APIController < Sinatra::Base
     end
   
     # Check if username already exists
-    if get_user_id(username)
+    if DatabaseHelper.get_user_id(username)
       halt 409, { error: 'Username is already taken' }.to_json
     end
   
     begin
       # Attempt to create user
-      pw_hash = BCrypt::Password.create(password)
-
-      @db.execute("INSERT INTO user (username, email, pw_hash) VALUES (?, ?, ?)", 
-                  [username, email, pw_hash])
+      DatabaseHelper.new_user(username, email, password)
       
       # Assuming user insertion is successful
-      user_id = get_user_id(username)  # Retrieve the ID of the newly created user
+      user_id = DatabaseHelper.get_user_id(username)  # Retrieve the ID of the newly created user
       if user_id
         status 204
         { user_id: user_id, username: username, email: email }.to_json
@@ -153,7 +146,7 @@ class APIController < Sinatra::Base
     
     no = params[:no]&.strip
     latest = params[:latest]&.strip
-    user_id = get_user_id(params[:username])
+    user_id = DatabaseHelper.get_user_id(params[:username])
 
     begin
       query = "SELECT message.*, user.* FROM message, user
@@ -186,7 +179,7 @@ class APIController < Sinatra::Base
     # Parse JSON body
     request_payload = JSON.parse(request.body.read) rescue {}
     content = request_payload["content"]&.strip
-    user_id = get_user_id(params[:username])
+    user_id = DatabaseHelper.get_user_id(params[:username])
 
     query = "INSERT INTO message (author_id, text, pub_date, flagged)
                    VALUES (?, ?, ?, 0)"
@@ -204,7 +197,7 @@ class APIController < Sinatra::Base
     end
 
     latest = params[:latest]
-    user_id = get_user_id(params[:username])
+    user_id = DatabaseHelper.get_user_id(params[:username])
 
     request_payload = JSON.parse(request.body.read) rescue {}
     no = request_payload["content"]&.strip
@@ -230,7 +223,7 @@ class APIController < Sinatra::Base
       return not_from_sim_response
     end
 
-    user_id = get_user_id(params[:username])
+    user_id = DatabaseHelper.get_user_id(params[:username])
     if user_id.nil?
       halt 404
     end
@@ -239,10 +232,10 @@ class APIController < Sinatra::Base
 
     if request_payload.key?("follow") 
       query = "INSERT INTO follower (who_id, whom_id) VALUES (?, ?)"
-      fllw_id = get_user_id(request_payload["follow"]&.strip)
+      fllw_id = DatabaseHelper.get_user_id(request_payload["follow"]&.strip)
     elsif request_payload.key?("unfollow")
       query = "DELETE FROM follower WHERE who_id=? and WHOM_ID=?"
-      fllw_id = get_user_id(request_payload["unfollow"]&.strip)
+      fllw_id = DatabaseHelper.get_user_id(request_payload["unfollow"]&.strip)
     end
     
     if fllw_id.nil?
