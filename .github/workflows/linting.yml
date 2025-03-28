@@ -22,5 +22,5 @@ jobs:
         run: bundle install
 
       - name: Run RuboCop
-        run: bundle exec rubocop -A --autocorrect-all --out rubocop_report.txt
+        run: bundle exec rubocop -A --autocorrect-all
 
