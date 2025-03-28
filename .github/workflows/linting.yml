@@ -22,4 +22,4 @@ jobs:
         run: bundle install
 
       - name: Run RuboCop
-        run: bundle exec rubocop -a -x/--fix-layout
+        run: bundle exec rubocop -a
