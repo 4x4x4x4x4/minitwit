@@ -22,5 +22,13 @@ jobs:
         run: bundle install
 
       - name: Run RuboCop
-        run: bundle exec rubocop -A --autocorrect-all
+        run: bundle exec rubocop -A --autocorrect-all --out rubocop_report.txt
 
+      - name: Show RuboCop Report
+        run: cat rubocop_report.txt
+
+      - name: Upload RuboCop Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: rubocop-report
+          path: rubocop_report.txt
