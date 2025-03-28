@@ -28,7 +28,7 @@ jobs:
         run: cat rubocop_report.txt
 
       - name: Upload RuboCop Report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: rubocop-report
           path: rubocop_report.txt
