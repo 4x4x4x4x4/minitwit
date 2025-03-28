@@ -1,11 +1,6 @@
-class Message
-    attr_reader :id, :author_id, :text, :pub_date, :flagged
-  
-    def initialize(id:, author_id:, text:, pub_date:, flagged:)
-      @id = id
-      @author_id = author_id
-      @text = text
-      @pub_date = pub_date
-      @flagged = flagged
-    end
-  end
+class Message < Sequel::Model
+  many_to_one :user  # Each message belongs to one user
+
+  # Sequel automatically maps columns, no need for an explicit initialize method
+end
+

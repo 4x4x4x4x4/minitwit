@@ -1,10 +1,9 @@
-class User
-    attr_reader :id, :username, :email, :password_hash
-  
-    def initialize(id:, username:, email:, password_hash:)
-      @id = id
-      @username = username
-      @email = email
-      @password_hash = password_hash
-    end
-  end
+require 'sequel'
+
+class User < Sequel::Model
+  one_to_many :messages  # A user has many messages
+
+  # If you want to automatically handle timestamps
+  plugin :timestamps, update_on_create: true
+end
+
