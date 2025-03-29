@@ -7,7 +7,7 @@
     <% if @user %>
       <a href="<%= url("/#{@username}") %>">my timeline</a> |
       <a href="<%= url('/public') %>">public timeline</a> |
-      <a href="<%= url('/logout') %>">sign out <%= @user['username'] %></a>
+      <a href="<%= url('/logout') %>">sign out <%= @user[:username] %></a>
     <% else %>
       <a href="<%= url('/public') %>">public timeline</a> |
       <a href="<%= url('/register') %>">sign up</a> |
