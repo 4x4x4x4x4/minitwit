@@ -117,10 +117,8 @@ class APIController < Sinatra::Base
 
 
     begin
-      query = "SELECT message.*, user.* FROM message, user
-        WHERE message.flagged = 0 AND message.author_id = user.user_id
-        ORDER BY message.pub_date DESC LIMIT ?"
-      msgs = @db.execute(query, [no ? no.to_i : 100]) #defaults no to 100
+      msgs = DatabaseHelper.get_messages([no ? no.to_i : 100])
+
 
       filtered_msgs = []
       msgs.each do |msg|
@@ -179,12 +177,8 @@ class APIController < Sinatra::Base
     # Parse JSON body
     request_payload = JSON.parse(request.body.read) rescue {}
     content = request_payload["content"]&.strip
-    user_id = DatabaseHelper.get_user_id(params[:username])
 
-    query = "INSERT INTO message (author_id, text, pub_date, flagged)
-                   VALUES (?, ?, ?, 0)"
-    
-    @db.execute(query, [user_id, content, Time.now.to_i])
+    DatabaseHelper.new_message(params[:username], content)   
   end
 
   get '/api/fllws/:username' do
