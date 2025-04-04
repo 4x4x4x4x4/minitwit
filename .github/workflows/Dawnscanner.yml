@@ -21,4 +21,4 @@ jobs:
         run: bundle install
 
       - name: Run Dawnscanner
-        run: dawn scan Gemfile.lock
+        run: dawn scan .
