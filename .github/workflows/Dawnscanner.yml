@@ -19,7 +19,7 @@ jobs:
       - name: Install Dependencies
         run: bundle install
 
-      - name: Install Knowledge base
+      - name: Install Knowledge base and Run
         run: |
           curl -LO https://github.com/thesp0nge/dawnscanner_knowledge_base/releases/download/v20240116/kb.tar.gz
           tar -xzf kb.tar.gz  
@@ -28,17 +28,4 @@ jobs:
           pwd
           ls -l /home/runner/.dawnscanner/kb/  # Verify the move
           pwd
-
-      - name: Run Dawnscanner
-        run: |
-          # Move to the parent directory where Gemfile.lock is located
-          cd ..
-
-          # Verify you're in the correct directory
-          pwd
-          ls -la  # Check if Gemfile.lock is here
-
-          # Run dawn scan on the parent directory
           dawn scan .
-      
-
