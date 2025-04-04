@@ -27,10 +27,8 @@ jobs:
           mv * /home/runner/.dawnscanner/kb/  # Move all extracted contents (check if kb.yaml is included)
           ls -l /home/runner/.dawnscanner/kb/  # Verify the move
           pwd
-          ls
-
 
       - name: Run Dawnscanner
         run: |
-          ls -l
+          pwd
           dawn scan .
