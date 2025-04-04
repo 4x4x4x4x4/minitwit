@@ -27,11 +27,6 @@ jobs:
 
       - name: Run Dawnscanner
         run: |
-          dawnscanner scan --knowledge-base ./dawnscanner_kb --output dawnscanner_report.txt
+          dawn scan target
         continue-on-error: true
 
-      - name: Upload Dawnscanner Report
-        uses: actions/upload-artifact@v4
-        with:
-          name: dawnscanner-report
-          path: dawnscanner_report.txt
