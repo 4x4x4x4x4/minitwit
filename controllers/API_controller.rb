@@ -163,8 +163,8 @@ class APIController < Sinatra::Base
     # Parse JSON body
     request_payload = JSON.parse(request.body.read) rescue {}
     content = request_payload["content"]&.strip
-
-    DatabaseHelper.new_message(params[:username], content)   
+    user_id = DatabaseHelper.get_user_id(params[:username])
+    DatabaseHelper.new_message(user_id, content)   
   end
 
   get '/api/fllws/:username' do
