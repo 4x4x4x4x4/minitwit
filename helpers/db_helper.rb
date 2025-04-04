@@ -21,9 +21,8 @@ module DatabaseHelper
     BCrypt::Password.new(pw_hash) == password
   end
 
-  def self.new_message(username, message)
-    user_id = self.get_user_id(username)
-    Message.insert(author_id: user_id, text: message, flagged: 0)
+  def self.new_message(user_id, message)
+    Message.insert(author_id: user_id, text: message, flagged: 0, pub_date: Time.now.to_i)
   end
 
   def self.get_messages(no_messages)
@@ -46,14 +45,12 @@ module DatabaseHelper
   end
 
   def self.get_user_timeline(user_id, no_messages)
-    followee_ids = get_followee_ids(user_id)
+    followee_ids = get_followee_ids(user_id).keys
+    followee_ids += [user_id]
     Message
       .join(:user, user_id: :author_id)
       .where(flagged: 0)
-      .where{
-        (author_id == user_id) | 
-        (followee_ids.has_key?(author_id))
-      }
+      .where(author_id: followee_ids)
       .order(Sequel.desc(:pub_date))
       .limit(no_messages)
       .all
