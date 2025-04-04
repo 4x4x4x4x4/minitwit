@@ -1,4 +1,4 @@
-name: linting.yml
+name: Linting
 
 on:
   pull_request:
