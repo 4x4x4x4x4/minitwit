@@ -8,9 +8,6 @@ require_relative '../helpers/db_helper'
 class APIController < Sinatra::Base
   
   helpers do
-    def db_connection
-        SQLite3::Database.new('database/minitwit.db', results_as_hash: true)
-    end
 
     #Helper function to check authorization
     def not_req_from_simulator(request)
@@ -32,14 +29,6 @@ class APIController < Sinatra::Base
     end
 
 
-  end
-
-  before do
-    @db = db_connection
-  end
-
-  after do
-    @db.close if @db
   end
 
   get '/api/latest' do
@@ -147,10 +136,7 @@ class APIController < Sinatra::Base
     user_id = DatabaseHelper.get_user_id(params[:username])
 
     begin
-      query = "SELECT message.*, user.* FROM message, user
-        WHERE message.flagged = 0 AND message.author_id = user.user_id AND user.user_id = ?
-        ORDER BY message.pub_date DESC LIMIT ?"
-      msgs = @db.execute(query, [user_id, no.to_i])
+      msgs = DatabaseHelper.get_user_messages(user_id, no.to_i)
 
       filtered_msgs = []
       msgs.each do |msg|
@@ -197,12 +183,7 @@ class APIController < Sinatra::Base
     no = request_payload["content"]&.strip
 
 
-    query = "SELECT user.username FROM user
-                   INNER JOIN follower ON follower.whom_id=user.user_id
-                   WHERE follower.who_id=?
-                   LIMIT ?"
-
-    followers = @db.execute(query, [user_id, no ? no.to_i : 100]) #if no was not set default to 100
+    followers = DatabaseHelper.get_followees_username(user_id, no ? no.to_i : 100) #if no was not set default to 100
     follower_names = followers.map { |e| e["username"] }
     followers_response = {"follows": follower_names}
     followers_response.to_json
@@ -225,17 +206,19 @@ class APIController < Sinatra::Base
     request_payload = JSON.parse(request.body.read) rescue {}
 
     if request_payload.key?("follow") 
-      query = "INSERT INTO follower (who_id, whom_id) VALUES (?, ?)"
       fllw_id = DatabaseHelper.get_user_id(request_payload["follow"]&.strip)
+      if fllw_id.nil?
+        halt 404
+      end
+      DatabaseHelper.follow(user_id, fllw_id)
     elsif request_payload.key?("unfollow")
-      query = "DELETE FROM follower WHERE who_id=? and WHOM_ID=?"
       fllw_id = DatabaseHelper.get_user_id(request_payload["unfollow"]&.strip)
+      if fllw_id.nil?
+        halt 404
+      end
+      DatabaseHelper.unfollow(user_id,  fllw_id)
     end
-    
-    if fllw_id.nil?
-      halt 404
-    end
+
     status 204
-    @db.execute(query, [user_id, fllw_id])
   end
 end

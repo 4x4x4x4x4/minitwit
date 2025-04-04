@@ -73,4 +73,11 @@ module DatabaseHelper
   def self.get_followee_ids(user_id)
     Follower.where(who_id: user_id).as_hash(:whom_id)
   end
+
+  def self.get_followees_username(user_id, no_users)
+    User.join(:follower, whom_id: :user_id)
+        .where(who_id: user_id)
+        .limit(no_users)
+        .get(:username)
+  end
 end
