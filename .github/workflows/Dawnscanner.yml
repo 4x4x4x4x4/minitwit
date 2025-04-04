@@ -17,6 +17,9 @@ jobs:
         with:
           ruby-version: '3.2'
 
+      - name: Install Dependencies
+        run: bundle install
+
       - name: Install Dawnscanner
         run: |
           gem install dawnscanner
