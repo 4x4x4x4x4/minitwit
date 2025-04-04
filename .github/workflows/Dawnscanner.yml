@@ -25,7 +25,16 @@ jobs:
           tar -xzf kb.tar.gz  
           mkdir -p /home/runner/.dawnscanner/kb  # Create the folder for the knowledge base
           mv * /home/runner/.dawnscanner/kb/  # Move all extracted contents (check if kb.yaml is included)
+          
+          # Verify the contents of the knowledge base
+          ls -l /home/runner/.dawnscanner/kb/
+          
+          # Move to the parent directory (where Gemfile.lock is)
+          cd ..
+          
+          # Verify that Gemfile.lock is present
           pwd
-          ls -l /home/runner/.dawnscanner/kb/  # Verify the move
-          pwd
+          ls -la
+          
+          # Run dawn scan from the parent directory
           dawn scan .
