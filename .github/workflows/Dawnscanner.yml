@@ -23,6 +23,7 @@ jobs:
         run: |
           curl -LO https://github.com/thesp0nge/dawnscanner_knowledge_base/releases/download/v20240116/kb.tar.gz
           tar -xzf kb.tar.gz
+          ls -l ~/.dawnscanner/kb/
 
 
       - name: Run Dawnscanner
