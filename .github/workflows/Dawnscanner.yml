@@ -19,8 +19,7 @@ jobs:
 
       - name: Install Dawnscanner
         run: |
-          gem install dawnscanner --user-install
-          echo "$HOME/.local/share/gem/ruby/3.2.0/bin" >> $GITHUB_PATH
+          gem install dawnscanner
 
       - name: Verify Dawnscanner Installation
         run: gem list | grep dawnscanner
@@ -28,5 +27,3 @@ jobs:
       - name: Run Dawnscanner
         run: |
           dawn scan target
-        continue-on-error: true
-
