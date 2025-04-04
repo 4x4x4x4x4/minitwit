@@ -31,4 +31,6 @@ jobs:
 
 
       - name: Run Dawnscanner
-        run: dawn scan .
+        run: |
+          ls -l
+          dawn scan .
