@@ -22,7 +22,9 @@ module DatabaseHelper
   end
 
   def self.new_message(user_id, message)
-    Message.insert(author_id: user_id, text: message, flagged: 0, pub_date: Time.now.to_i)
+    two_hours = 7200
+    time = Time.now.to_i + two_hours
+    Message.insert(author_id: user_id, text: message, flagged: 0, pub_date: time)
   end
 
   def self.get_messages(no_messages)

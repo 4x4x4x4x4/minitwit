@@ -17,7 +17,6 @@ class TimelineController < Sinatra::Base
   get '/' do
     redirect '/public' unless logged_in?
     @messages = DatabaseHelper.get_user_timeline(session[:user_id],30)
-    puts "hello"
     erb :timeline
   end
 
