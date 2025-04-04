@@ -1,0 +1,92 @@
+--- !ruby/object:Dawn::Kb::UnsafeDependencyCheck
+applies:
+- rails
+- sinatra
+- padrino
+title: CVE-2012-1099
+cvss: AV:N/AC:M/Au:N/C:N/I:P/A:N
+cve: CVE-2012-1099
+name: CVE-2012-1099
+owasp: A9
+release_date: 13/03/2012
+
+kind: :unsafe_dependency_check
+message: |-
+ Cross-site scripting (XSS) vulnerability in actionpack/lib/action_view/helpers/form_options_helper.rb in the select helper in Ruby on Rails 3.0.x before 3.0.12, 3.1.x before 3.1.4, and 3.2.x before 3.2.2 allows remote attackers to inject arbitrary web script or HTML via vectors involving certain generation of OPTION elements within SELECT elements.
+check_family: :bulletin
+vulnerable_version_array:
+- :name: 'rails'
+  :version:
+  - 3.0.0
+  :version:
+  - 3.0.0
+  :version:
+  - 3.0.0
+  :version:
+  - 3.0.0
+  :version:
+  - 3.0.0
+  :version:
+  - 3.0.0
+  :version:
+  - 3.0.0
+  :version:
+  - 3.0.1
+  :version:
+  - 3.0.1
+  :version:
+  - 3.0.2
+  :version:
+  - 3.0.2
+  :version:
+  - 3.0.3
+  :version:
+  - 3.0.4
+  :version:
+  - 3.0.5
+  :version:
+  - 3.0.5
+  :version:
+  - 3.0.6
+  :version:
+  - 3.0.6
+  :version:
+  - 3.0.6
+  :version:
+  - 3.0.7
+  :version:
+  - 3.0.7
+  :version:
+  - 3.0.7
+  :version:
+  - 3.0.8
+  :version:
+  - 3.0.8
+  :version:
+  - 3.0.8
+  :version:
+  - 3.0.8
+  :version:
+  - 3.0.8
+  :version:
+  - 3.0.9
+  :version:
+  - 3.0.9
+  :version:
+  - 3.0.9
+  :version:
+  - 3.0.9
+  :version:
+  - 3.0.9
+  :version:
+  - 3.0.9
+  :version:
+  - 3.0.10
+  :version:
+  - 3.0.10
+  :version:
+  - 3.0.11
+  :version:
+  - 3.0.12
+  :version:
+  - 3.0.4

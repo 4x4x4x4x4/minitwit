@@ -1,0 +1,24 @@
+--- !ruby/object:Dawn::Kb::UnsafeDependencyCheck
+applies:
+- rails
+- sinatra
+- padrino
+title: CVE-2006-3694
+cvss: AV:N/AC:L/Au:N/C:P/I:P/A:N
+cve: CVE-2006-3694
+name: CVE-2006-3694
+owasp: A9
+release_date: 21/07/2006
+
+kind: :unsafe_dependency_check
+message: |-
+ Multiple unspecified vulnerabilities in Ruby before 1.8.5 allow remote attackers to bypass "safe level" checks via unspecified vectors involving (1) the alias function and (2) "directory operations".
+check_family: :bulletin
+vulnerable_version_array:
+- :name: 'ruby'
+  :version:
+  - 1.8.2
+  :version:
+  - 1.8.3
+  :version:
+  - 1.8.4

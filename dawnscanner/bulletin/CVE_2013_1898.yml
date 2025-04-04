@@ -1,0 +1,20 @@
+--- !ruby/object:Dawn::Kb::UnsafeDependencyCheck
+applies:
+- rails
+- sinatra
+- padrino
+title: CVE-2013-1898
+cvss: AV:N/AC:L/Au:N/C:P/I:P/A:P
+cve: CVE-2013-1898
+name: CVE-2013-1898
+owasp: A9
+release_date: 09/04/2013
+
+kind: :unsafe_dependency_check
+message: |-
+ lib/thumbshooter.rb in the Thumbshooter 0.1.5 gem for Ruby allows remote attackers to execute arbitrary commands via shell metacharacters in a URL.
+check_family: :bulletin
+vulnerable_version_array:
+- :name: 'thumbshooter'
+  :version:
+  - 0.1.5

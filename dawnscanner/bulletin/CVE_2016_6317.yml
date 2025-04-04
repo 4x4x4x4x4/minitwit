@@ -1,0 +1,72 @@
+--- !ruby/object:Dawn::Kb::UnsafeDependencyCheck
+applies:
+- rails
+- sinatra
+- padrino
+title: CVE-2016-6317
+cvss: AV:N/AC:L/Au:N/C:N/I:P/A:N
+cve: CVE-2016-6317
+name: CVE-2016-6317
+owasp: A9
+release_date: 07/09/2016
+
+kind: :unsafe_dependency_check
+message: |-
+ Action Record in Ruby on Rails 4.2.x before 4.2.7.1 does not properly consider differences in parameter handling between the Active Record component and the JSON implementation, which allows remote attackers to bypass intended database-query restrictions and perform NULL checks or trigger missing WHERE clauses via a crafted request, as demonstrated by certain "[nil]" values, a related issue to CVE-2012-2660, CVE-2012-2694, and CVE-2013-0155.
+check_family: :bulletin
+vulnerable_version_array:
+- :name: 'rails'
+  :version:
+  - 4.2.0
+  :version:
+  - 4.2.0
+  :version:
+  - 4.2.0
+  :version:
+  - 4.2.0
+  :version:
+  - 4.2.0
+  :version:
+  - 4.2.0
+  :version:
+  - 4.2.0
+  :version:
+  - 4.2.0
+  :version:
+  - 4.2.1
+  :version:
+  - 4.2.1
+  :version:
+  - 4.2.1
+  :version:
+  - 4.2.1
+  :version:
+  - 4.2.1
+  :version:
+  - 4.2.2
+  :version:
+  - 4.2.3
+  :version:
+  - 4.2.3
+  :version:
+  - 4.2.4
+  :version:
+  - 4.2.4
+  :version:
+  - 4.2.5
+  :version:
+  - 4.2.5
+  :version:
+  - 4.2.5
+  :version:
+  - 4.2.5.1
+  :version:
+  - 4.2.5.2
+  :version:
+  - 4.2.6
+  :version:
+  - 4.2.6
+  :version:
+  - 4.2.7
+  :version:
+  - 4.2.7

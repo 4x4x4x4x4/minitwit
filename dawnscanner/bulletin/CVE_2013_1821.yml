@@ -1,0 +1,37 @@
+--- !ruby/object:Dawn::Kb::UnsafeDependencyCheck
+applies:
+- rails
+- sinatra
+- padrino
+title: CVE-2013-1821
+cvss: AV:N/AC:L/Au:N/C:N/I:N/A:P
+cve: CVE-2013-1821
+name: CVE-2013-1821
+owasp: A9
+release_date: 09/04/2013
+
+kind: :unsafe_dependency_check
+message: |-
+ lib/rexml/text.rb in the REXML parser in Ruby before 1.9.3-p392 allows remote attackers to cause a denial of service (memory consumption and crash) via crafted text nodes in an XML document, aka an XML Entity Expansion (XEE) attack.
+check_family: :bulletin
+vulnerable_version_array:
+- :name: 'ruby'
+  :versionEndIncluding: 1.9.3
+  :version:
+  - 1.9
+  :version:
+  - 1.9.1
+  :version:
+  - 1.9.2
+  :version:
+  - 1.9.3
+  :version:
+  - 1.9.3
+  :version:
+  - 1.9.3
+  :version:
+  - 1.9.3
+  :version:
+  - 1.9.3
+  :version:
+  - 1.9.3

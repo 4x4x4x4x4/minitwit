@@ -1,0 +1,29 @@
+--- !ruby/object:Dawn::Kb::UnsafeDependencyCheck
+applies:
+- rails
+- sinatra
+- padrino
+title: CVE-2013-6414
+cvss: AV:N/AC:L/Au:N/C:N/I:N/A:P
+cve: CVE-2013-6414
+name: CVE-2013-6414
+owasp: A9
+release_date: 07/12/2013
+
+kind: :unsafe_dependency_check
+message: |-
+ actionpack/lib/action_view/lookup_context.rb in Action View in Ruby on Rails 3.x before 3.2.16 and 4.x before 4.0.2 allows remote attackers to cause a denial of service (memory consumption) via a header containing an invalid MIME type that leads to excessive caching.
+check_family: :bulletin
+vulnerable_version_array:
+- :name: 'rails'
+  :versionEndIncluding: 4.0.1
+  :version:
+  - 4.0.0
+  :version:
+  - 4.0.0
+  :version:
+  - 4.0.0
+  :version:
+  - 4.0.0
+  :version:
+  - 4.0.1

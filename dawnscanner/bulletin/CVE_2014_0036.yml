@@ -1,0 +1,63 @@
+--- !ruby/object:Dawn::Kb::UnsafeDependencyCheck
+applies:
+- rails
+- sinatra
+- padrino
+title: CVE-2014-0036
+cvss: AV:N/AC:M/Au:N/C:P/I:P/A:P
+cve: CVE-2014-0036
+name: CVE-2014-0036
+owasp: A9
+release_date: 17/04/2014
+
+kind: :unsafe_dependency_check
+message: |-
+ The rbovirt gem before 0.0.24 for Ruby uses the rest-client gem with SSL verification disabled, which allows remote attackers to conduct man-in-the-middle attacks via unspecified vectors.
+check_family: :bulletin
+vulnerable_version_array:
+- :name: 'rbovirt'
+  :versionEndIncluding: 0.0.23
+  :version:
+  - 0.0.1
+  :version:
+  - 0.0.2
+  :version:
+  - 0.0.3
+  :version:
+  - 0.0.4
+  :version:
+  - 0.0.5
+  :version:
+  - 0.0.6
+  :version:
+  - 0.0.7
+  :version:
+  - 0.0.8
+  :version:
+  - 0.0.9
+  :version:
+  - 0.0.10
+  :version:
+  - 0.0.11
+  :version:
+  - 0.0.12
+  :version:
+  - 0.0.13
+  :version:
+  - 0.0.14
+  :version:
+  - 0.0.15
+  :version:
+  - 0.0.16
+  :version:
+  - 0.0.17
+  :version:
+  - 0.0.18
+  :version:
+  - 0.0.19
+  :version:
+  - 0.0.20
+  :version:
+  - 0.0.21
+  :version:
+  - 0.0.22

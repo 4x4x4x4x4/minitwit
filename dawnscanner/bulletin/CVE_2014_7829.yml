@@ -1,0 +1,24 @@
+--- !ruby/object:Dawn::Kb::UnsafeDependencyCheck
+applies:
+- rails
+- sinatra
+- padrino
+title: CVE-2014-7829
+cvss: AV:N/AC:L/Au:N/C:P/I:N/A:N
+cve: CVE-2014-7829
+name: CVE-2014-7829
+owasp: A9
+release_date: 18/11/2014
+
+kind: :unsafe_dependency_check
+message: |-
+ Directory traversal vulnerability in actionpack/lib/action_dispatch/middleware/static.rb in Action Pack in Ruby on Rails 3.x before 3.2.21, 4.0.x before 4.0.12, 4.1.x before 4.1.8, and 4.2.x before 4.2.0.beta4, when serve_static_assets is enabled, allows remote attackers to determine the existence of files outside the application root via vectors involving a \ (backslash) character, a similar issue to CVE-2014-7818.
+check_family: :bulletin
+vulnerable_version_array:
+- :name: 'opensuse'
+  :version:
+  - 12.3
+  :version:
+  - 13.1
+  :version:
+  - 13.2

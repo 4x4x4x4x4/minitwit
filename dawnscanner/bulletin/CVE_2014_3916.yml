@@ -1,0 +1,24 @@
+--- !ruby/object:Dawn::Kb::UnsafeDependencyCheck
+applies:
+- rails
+- sinatra
+- padrino
+title: CVE-2014-3916
+cvss: AV:N/AC:L/Au:N/C:N/I:N/A:P
+cve: CVE-2014-3916
+name: CVE-2014-3916
+owasp: A9
+release_date: 16/11/2014
+
+kind: :unsafe_dependency_check
+message: |-
+ The str_buf_cat function in string.c in Ruby 1.9.3, 2.0.0, and 2.1 allows context-dependent attackers to cause a denial of service (segmentation fault and crash) via a long string.
+check_family: :bulletin
+vulnerable_version_array:
+- :name: 'rails'
+  :version:
+  - 1.9.3
+  :version:
+  - 2.0.0
+  :version:
+  - 2.1.0

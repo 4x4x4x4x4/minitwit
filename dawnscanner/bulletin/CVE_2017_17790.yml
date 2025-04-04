@@ -1,0 +1,23 @@
+--- !ruby/object:Dawn::Kb::UnsafeDependencyCheck
+applies:
+- rails
+- sinatra
+- padrino
+title: CVE-2017-17790
+cvss: AV:N/AC:L/Au:N/C:P/I:P/A:P
+cve: CVE-2017-17790
+name: CVE-2017-17790
+owasp: A9
+release_date: 20/12/2017
+
+kind: :unsafe_dependency_check
+message: |-
+ The lazy_initialize function in lib/resolv.rb in Ruby through 2.4.3 uses Kernel#open, which might allow Command Injection attacks, as demonstrated by a Resolv::Hosts::new argument beginning with a '|' character, a different vulnerability than CVE-2017-17405. NOTE: situations with untrusted input may be highly unlikely.
+check_family: :bulletin
+vulnerable_version_array:
+- :name: 'ruby'
+  :versionEndIncluding: 2.2.8
+  :versionEndIncluding: 2.3.5
+  :versionEndIncluding: 2.4.2
+  :version:
+  - 2.5.0

@@ -1,0 +1,162 @@
+--- !ruby/object:Dawn::Kb::UnsafeDependencyCheck
+applies:
+- rails
+- sinatra
+- padrino
+title: CVE-2017-0903
+cvss: AV:N/AC:L/Au:N/C:P/I:P/A:P
+cve: CVE-2017-0903
+name: CVE-2017-0903
+owasp: A9
+release_date: 11/10/2017
+
+kind: :unsafe_dependency_check
+message: |-
+ RubyGems versions between 2.0.0 and 2.6.13 are vulnerable to a possible remote code execution vulnerability. YAML deserialization of gem specifications can bypass class white lists. Specially crafted serialized objects can possibly be used to escalate to remote code execution.
+check_family: :bulletin
+vulnerable_version_array:
+- :name: 'rubygems'
+  :version:
+  - 2.0.0
+  :version:
+  - 2.0.0
+  :version:
+  - 2.0.0
+  :version:
+  - 2.0.0
+  :version:
+  - 2.0.0
+  :version:
+  - 2.0.0
+  :version:
+  - 2.0.1
+  :version:
+  - 2.0.2
+  :version:
+  - 2.0.3
+  :version:
+  - 2.0.4
+  :version:
+  - 2.0.5
+  :version:
+  - 2.0.6
+  :version:
+  - 2.0.7
+  :version:
+  - 2.0.8
+  :version:
+  - 2.0.9
+  :version:
+  - 2.0.10
+  :version:
+  - 2.0.11
+  :version:
+  - 2.0.12
+  :version:
+  - 2.0.13
+  :version:
+  - 2.0.14
+  :version:
+  - 2.0.15
+  :version:
+  - 2.0.16
+  :version:
+  - 2.0.17
+  :version:
+  - 2.1.0
+  :version:
+  - 2.1.0.rc.1
+  :version:
+  - 2.1.0.rc.2
+  :version:
+  - 2.1.1
+  :version:
+  - 2.1.2
+  :version:
+  - 2.1.3
+  :version:
+  - 2.1.4
+  :version:
+  - 2.1.5
+  :version:
+  - 2.1.6
+  :version:
+  - 2.1.7
+  :version:
+  - 2.1.8
+  :version:
+  - 2.1.9
+  :version:
+  - 2.1.10
+  :version:
+  - 2.1.11
+  :version:
+  - 2.2.0
+  :version:
+  - 2.2.0.preiew.1
+  :version:
+  - 2.2.0.rc.1
+  :version:
+  - 2.2.1
+  :version:
+  - 2.2.2
+  :version:
+  - 2.2.3
+  :version:
+  - 2.2.4
+  :version:
+  - 2.2.5
+  :version:
+  - 2.3.0
+  :version:
+  - 2.4.0
+  :version:
+  - 2.4.1
+  :version:
+  - 2.4.2
+  :version:
+  - 2.4.3
+  :version:
+  - 2.4.4
+  :version:
+  - 2.4.5
+  :version:
+  - 2.4.6
+  :version:
+  - 2.4.7
+  :version:
+  - 2.4.8
+  :version:
+  - 2.5.0
+  :version:
+  - 2.5.1
+  :version:
+  - 2.5.2
+  :version:
+  - 2.6.0
+  :version:
+  - 2.6.1
+  :version:
+  - 2.6.2
+  :version:
+  - 2.6.3
+  :version:
+  - 2.6.4
+  :version:
+  - 2.6.5
+  :version:
+  - 2.6.6
+  :version:
+  - 2.6.7
+  :version:
+  - 2.6.8
+  :version:
+  - 2.6.9
+  :version:
+  - 2.6.10
+  :version:
+  - 2.6.11
+  :version:
+  - 2.6.12
+  :version:
+  - 2.6.13

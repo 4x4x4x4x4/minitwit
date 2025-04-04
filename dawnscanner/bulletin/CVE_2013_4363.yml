@@ -1,0 +1,115 @@
+--- !ruby/object:Dawn::Kb::UnsafeDependencyCheck
+applies:
+- rails
+- sinatra
+- padrino
+title: CVE-2013-4363
+cvss: AV:N/AC:M/Au:N/C:N/I:N/A:P
+cve: CVE-2013-4363
+name: CVE-2013-4363
+owasp: A9
+release_date: 17/10/2013
+
+kind: :unsafe_dependency_check
+message: |-
+ Algorithmic complexity vulnerability in Gem::Version::ANCHORED_VERSION_PATTERN in lib/rubygems/version.rb in RubyGems before 1.8.23.2, 1.8.24 through 1.8.26, 2.0.x before 2.0.10, and 2.1.x before 2.1.5, as used in Ruby 1.9.0 through 2.0.0p247, allows remote attackers to cause a denial of service (CPU consumption) via a crafted gem version that triggers a large amount of backtracking in a regular expression.  NOTE: this issue is due to an incomplete fix for CVE-2013-4287.
+check_family: :bulletin
+vulnerable_version_array:
+- :name: 'rubygems'
+  :versionEndIncluding: 1.8.23
+  :version:
+  - 1.8.0
+  :version:
+  - 1.8.1
+  :version:
+  - 1.8.2
+  :version:
+  - 1.8.3
+  :version:
+  - 1.8.4
+  :version:
+  - 1.8.5
+  :version:
+  - 1.8.6
+  :version:
+  - 1.8.7
+  :version:
+  - 1.8.8
+  :version:
+  - 1.8.9
+  :version:
+  - 1.8.10
+  :version:
+  - 1.8.11
+  :version:
+  - 1.8.12
+  :version:
+  - 1.8.13
+  :version:
+  - 1.8.14
+  :version:
+  - 1.8.15
+  :version:
+  - 1.8.16
+  :version:
+  - 1.8.17
+  :version:
+  - 1.8.18
+  :version:
+  - 1.8.19
+  :version:
+  - 1.8.20
+  :version:
+  - 1.8.21
+  :version:
+  - 1.8.22
+  :version:
+  - 1.8.24
+  :version:
+  - 1.8.25
+  :version:
+  - 1.8.26
+  :version:
+  - 2.0.0
+  :version:
+  - 2.0.0
+  :version:
+  - 2.0.0
+  :version:
+  - 2.0.0
+  :version:
+  - 2.0.0
+  :version:
+  - 2.0.0
+  :version:
+  - 2.0.1
+  :version:
+  - 2.0.2
+  :version:
+  - 2.0.3
+  :version:
+  - 2.0.4
+  :version:
+  - 2.0.5
+  :version:
+  - 2.0.6
+  :version:
+  - 2.0.7
+  :version:
+  - 2.0.8
+  :version:
+  - 2.0.9
+  :version:
+  - 2.1.0
+  :version:
+  - 2.1.0
+  :version:
+  - 2.1.0
+  :version:
+  - 2.1.1
+  :version:
+  - 2.1.2
+  :version:
+  - 2.1.3
+  :version:
+  - 2.1.4

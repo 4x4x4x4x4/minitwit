@@ -1,0 +1,22 @@
+--- !ruby/object:Dawn::Kb::UnsafeDependencyCheck
+applies:
+- rails
+- sinatra
+- padrino
+title: CVE-2015-3227
+cvss: AV:N/AC:L/Au:N/C:N/I:N/A:P
+cve: CVE-2015-3227
+name: CVE-2015-3227
+owasp: A9
+release_date: 26/07/2015
+
+kind: :unsafe_dependency_check
+message: |-
+ The (1) jdom.rb and (2) rexml.rb components in Active Support in Ruby on Rails before 4.1.11 and 4.2.x before 4.2.2, when JDOM or REXML is enabled, allow remote attackers to cause a denial of service (SystemStackError) via a large XML document depth.
+check_family: :bulletin
+vulnerable_version_array:
+- :name: 'opensuse'
+  :version:
+  - 13.1
+  :version:
+  - 13.2

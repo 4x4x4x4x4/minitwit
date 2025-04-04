@@ -1,0 +1,47 @@
+--- !ruby/object:Dawn::Kb::UnsafeDependencyCheck
+applies:
+- rails
+- sinatra
+- padrino
+title: CVE-2013-0256
+cvss: AV:N/AC:M/Au:N/C:N/I:P/A:N
+cve: CVE-2013-0256
+name: CVE-2013-0256
+owasp: A9
+release_date: 01/03/2013
+
+kind: :unsafe_dependency_check
+message: |-
+ darkfish.js in RDoc 2.3.0 through 3.12 and 4.x before 4.0.0.preview2.1, as used in Ruby, does not properly generate documents, which allows remote attackers to conduct cross-site scripting (XSS) attacks via a crafted URL.
+check_family: :bulletin
+vulnerable_version_array:
+- :name: 'rdoc'
+  :versionEndExcluding: 3.12
+  :version:
+  - 4.0.0
+  :version:
+  - 1.9
+  :version:
+  - 1.9.1
+  :version:
+  - 1.9.2
+  :version:
+  - 1.9.3
+  :version:
+  - 1.9.3
+  :version:
+  - 1.9.3
+  :version:
+  - 1.9.3
+  :version:
+  - 1.9.3
+  :version:
+  - 1.9.3
+  :version:
+  - 2.0
+  :version:
+  - 2.0.0
+  :version:
+  - 2.0.0
+  :version:
+  - 2.0.0

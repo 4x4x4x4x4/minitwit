@@ -1,0 +1,20 @@
+--- !ruby/object:Dawn::Kb::UnsafeDependencyCheck
+applies:
+- rails
+- sinatra
+- padrino
+title: CVE-2013-4562
+cvss: AV:N/AC:M/Au:N/C:P/I:P/A:P
+cve: CVE-2013-4562
+name: CVE-2013-4562
+owasp: A9
+release_date: 13/05/2014
+
+kind: :unsafe_dependency_check
+message: |-
+ The omniauth-facebook gem 1.4.1 before 1.5.0 does not properly store the session parameter, which allows remote attackers to conduct cross-site request forgery (CSRF) attacks via the state parameter.
+check_family: :bulletin
+vulnerable_version_array:
+- :name: 'omniauth-facebook'
+  :version:
+  - 1.4.1

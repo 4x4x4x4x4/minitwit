@@ -1,0 +1,24 @@
+--- !ruby/object:Dawn::Kb::UnsafeDependencyCheck
+applies:
+- rails
+- sinatra
+- padrino
+title: CVE-2006-6852
+cvss: AV:N/AC:M/Au:S/C:P/I:P/A:P
+cve: CVE-2006-6852
+name: CVE-2006-6852
+owasp: A9
+release_date: 31/12/2006
+
+kind: :unsafe_dependency_check
+message: |-
+ Eval injection vulnerability in tDiary 2.0.3 and 2.1.4.200 61127 allows remote authenticated users to execute arbitrary Ruby code via unspecified vectors, possibly related to incorrect input validation by (1) conf.rhtml and (2) i.conf.rhtml.  NOTE: some of these details are obtained from third party information.
+check_family: :bulletin
+vulnerable_version_array:
+- :name: 'tdiary'
+  :version:
+  - 2.0.1
+  :version:
+  - 2.0.2
+  :version:
+  - 2.0.3

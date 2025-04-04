@@ -1,0 +1,75 @@
+--- !ruby/object:Dawn::Kb::UnsafeDependencyCheck
+applies:
+- rails
+- sinatra
+- padrino
+title: CVE-2013-0162
+cvss: AV:L/AC:L/Au:N/C:N/I:P/A:N
+cve: CVE-2013-0162
+name: CVE-2013-0162
+owasp: A9
+release_date: 01/03/2013
+
+kind: :unsafe_dependency_check
+message: |-
+ The diff_pp function in lib/gauntlet_rubyparser.rb in the ruby_parser gem 3.1.1 and earlier for Ruby allows local users to overwrite arbitrary files via a symlink attack on a temporary file with a predictable name in /tmp.
+check_family: :bulletin
+vulnerable_version_array:
+- :name: 'ruby_parser'
+  :versionEndIncluding: 3.1.1
+  :version:
+  - 1.0.0
+  :version:
+  - 2.0.0
+  :version:
+  - 2.0.1
+  :version:
+  - 2.0.2
+  :version:
+  - 2.0.3
+  :version:
+  - 2.0.4
+  :version:
+  - 2.0.5
+  :version:
+  - 2.0.6
+  :version:
+  - 2.1.0
+  :version:
+  - 2.2.0
+  :version:
+  - 2.3.0
+  :version:
+  - 2.3.1
+  :version:
+  - 3.0.0
+  :version:
+  - 3.0.0.a1
+  :version:
+  - 3.0.0.a2
+  :version:
+  - 3.0.0.a3
+  :version:
+  - 3.0.0.a4
+  :version:
+  - 3.0.0.a5
+  :version:
+  - 3.0.0.a6
+  :version:
+  - 3.0.0.a7
+  :version:
+  - 3.0.0.a8
+  :version:
+  - 3.0.0.a9
+  :version:
+  - 3.0.0.a10
+  :version:
+  - 3.0.1
+  :version:
+  - 3.0.2
+  :version:
+  - 3.0.3
+  :version:
+  - 3.0.4
+  :version:
+  - 3.1.0

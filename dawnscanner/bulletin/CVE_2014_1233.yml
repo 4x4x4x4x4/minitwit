@@ -1,0 +1,20 @@
+--- !ruby/object:Dawn::Kb::UnsafeDependencyCheck
+applies:
+- rails
+- sinatra
+- padrino
+title: CVE-2014-1233
+cvss: AV:L/AC:L/Au:N/C:P/I:N/A:N
+cve: CVE-2014-1233
+name: CVE-2014-1233
+owasp: A9
+release_date: 10/01/2014
+
+kind: :unsafe_dependency_check
+message: |-
+ The paratrooper-pingdom gem 1.0.0 for Ruby allows local users to obtain the App-Key, username, and password values by listing the curl process.
+check_family: :bulletin
+vulnerable_version_array:
+- :name: 'paratrooper-pingdom'
+  :version:
+  - 1.0.0

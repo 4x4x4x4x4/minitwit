@@ -1,0 +1,20 @@
+--- !ruby/object:Dawn::Kb::UnsafeDependencyCheck
+applies:
+- rails
+- sinatra
+- padrino
+title: CVE-2013-2512
+cvss: AV:N/AC:L/Au:N/C:C/I:C/A:C
+cve: CVE-2013-2512
+name: CVE-2013-2512
+owasp: A9
+release_date: 26/01/2021
+
+kind: :unsafe_dependency_check
+message: |-
+ The ftpd gem 0.2.1 for Ruby allows remote attackers to execute arbitrary OS commands via shell metacharacters in a LIST or NLST command argument within FTP protocol traffic.
+check_family: :bulletin
+vulnerable_version_array:
+- :name: 'ftpd'
+  :version:
+  - 0.2.1

@@ -1,0 +1,38 @@
+--- !ruby/object:Dawn::Kb::UnsafeDependencyCheck
+applies:
+- rails
+- sinatra
+- padrino
+title: CVE-2012-2671
+cvss: AV:N/AC:L/Au:N/C:P/I:P/A:P
+cve: CVE-2012-2671
+name: CVE-2012-2671
+owasp: A9
+release_date: 17/06/2012
+
+kind: :unsafe_dependency_check
+message: |-
+ The Rack::Cache rubygem 0.3.0 through 1.1 caches Set-Cookie and other sensitive headers, which allows attackers to obtain sensitive cookie information, hijack web sessions, or have other unspecified impact by accessing the cache.
+check_family: :bulletin
+vulnerable_version_array:
+- :name: 'rack-cach'
+  :version:
+  - 0.3.0
+  :version:
+  - 0.4
+  :version:
+  - 0.5
+  :version:
+  - 0.5.2
+  :version:
+  - 0.5.3
+  :version:
+  - 1.0
+  :version:
+  - 1.0.1
+  :version:
+  - 1.0.2
+  :version:
+  - 1.0.3
+  :version:
+  - 1.1

@@ -1,0 +1,110 @@
+--- !ruby/object:Dawn::Kb::UnsafeDependencyCheck
+applies:
+- rails
+- sinatra
+- padrino
+title: CVE-2013-0277
+cvss: AV:N/AC:L/Au:N/C:C/I:C/A:C
+cve: CVE-2013-0277
+name: CVE-2013-0277
+owasp: A9
+release_date: 13/02/2013
+
+kind: :unsafe_dependency_check
+message: |-
+ ActiveRecord in Ruby on Rails before 2.3.17 and 3.x before 3.1.0 allows remote attackers to cause a denial of service or execute arbitrary code via crafted serialized attributes that cause the +serialize+ helper to deserialize arbitrary YAML.
+check_family: :bulletin
+vulnerable_version_array:
+- :name: 'rails'
+  :version:
+  - 3.0.0
+  :version:
+  - 3.0.0
+  :version:
+  - 3.0.0
+  :version:
+  - 3.0.0
+  :version:
+  - 3.0.0
+  :version:
+  - 3.0.0
+  :version:
+  - 3.0.0
+  :version:
+  - 3.0.1
+  :version:
+  - 3.0.1
+  :version:
+  - 3.0.2
+  :version:
+  - 3.0.2
+  :version:
+  - 3.0.3
+  :version:
+  - 3.0.4
+  :version:
+  - 3.0.5
+  :version:
+  - 3.0.5
+  :version:
+  - 3.0.6
+  :version:
+  - 3.0.6
+  :version:
+  - 3.0.6
+  :version:
+  - 3.0.7
+  :version:
+  - 3.0.7
+  :version:
+  - 3.0.7
+  :version:
+  - 3.0.8
+  :version:
+  - 3.0.8
+  :version:
+  - 3.0.8
+  :version:
+  - 3.0.8
+  :version:
+  - 3.0.8
+  :version:
+  - 3.0.9
+  :version:
+  - 3.0.9
+  :version:
+  - 3.0.9
+  :version:
+  - 3.0.9
+  :version:
+  - 3.0.9
+  :version:
+  - 3.0.9
+  :version:
+  - 3.0.10
+  :version:
+  - 3.0.10
+  :version:
+  - 3.0.11
+  :version:
+  - 3.0.12
+  :version:
+  - 3.0.12
+  :version:
+  - 3.0.13
+  :version:
+  - 3.0.13
+  :version:
+  - 3.0.14
+  :version:
+  - 3.0.16
+  :version:
+  - 3.0.17
+  :version:
+  - 3.0.18
+  :version:
+  - 3.0.19
+  :version:
+  - 3.0.20
+  :version:
+  - 3.0.4

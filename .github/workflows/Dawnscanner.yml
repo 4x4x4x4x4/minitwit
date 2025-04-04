@@ -20,16 +20,5 @@ jobs:
       - name: Install Dependencies
         run: bundle install
 
-      - name: Install Dawnscanner
-        run: |
-          gem install dawnscanner
-
-      - name: Set Up Dawnscanner Knowledge Base
-        run: |
-          mkdir -p ~/.dawnscanner
-          curl -L -o dawnscanner_kb.tar.gz https://github.com/thesp0nge/dawnscanner-knowledge-base/tarball/main
-          tar -xzf dawnscanner_kb.tar.gz
-          mv thesp0nge-dawnscanner-knowledge-base-* ~/.dawnscanner/kb
-
       - name: Run Dawnscanner
         run: dawn scan .
