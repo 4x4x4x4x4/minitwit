@@ -23,7 +23,7 @@ jobs:
 
       - name: Set Up Dawnscanner Knowledge Base
         run: |
-          - mkdir -p ~/.dawnscanner
+          mkdir -p ~/.dawnscanner
           git clone https://github.com/thesp0nge/dawnscanner.git ~/dawnscanner_repo
           mv ~/dawnscanner_repo/kb ~/.dawnscanner/kb
 
