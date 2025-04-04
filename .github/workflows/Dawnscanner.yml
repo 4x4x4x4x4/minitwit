@@ -30,8 +30,14 @@ jobs:
 
       - name: Run Dawnscanner
         run: |
+          # Move to the parent directory where Gemfile.lock is located
+          cd ..
+
+          # Verify you're in the correct directory
           pwd
-          ls -la  # List all files, including hidden ones
-          ls -lR  # Recursively list all files and directories
-          dawn scan ../
+          ls -la  # Check if Gemfile.lock is here
+
+          # Run dawn scan on the parent directory
+          dawn scan .
+      
 
