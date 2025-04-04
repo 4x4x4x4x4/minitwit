@@ -2,13 +2,12 @@ require 'sinatra'
 require 'sqlite3'
 require 'bcrypt'
 require 'json'
+require_relative '../helpers/db_helper'
+
 
 class APIController < Sinatra::Base
   
   helpers do
-    def db_connection
-        SQLite3::Database.new('database/minitwit.db', results_as_hash: true)
-    end
 
     #Helper function to check authorization
     def not_req_from_simulator(request)
@@ -20,12 +19,6 @@ class APIController < Sinatra::Base
       nil
     end
 
-    def get_user_id(username)
-      @db.results_as_hash = true
-      result = @db.execute("SELECT user_id FROM user WHERE username = ?", [username]).first
-      result ? result['user_id'] : nil
-    end  
-
     def update_latest(request)
         parsed_command_id = request.params.fetch('latest', -1).to_i
         if parsed_command_id != -1
@@ -36,14 +29,6 @@ class APIController < Sinatra::Base
     end
 
 
-  end
-
-  before do
-    @db = db_connection
-  end
-
-  after do
-    @db.close if @db
   end
 
   get '/api/latest' do
@@ -83,19 +68,16 @@ class APIController < Sinatra::Base
     end
   
     # Check if username already exists
-    if get_user_id(username)
-      halt 409, { error: 'Username is already taken' }.to_json
+    if DatabaseHelper.get_user_id(username)
+      halt 400, { error: 'Username is already taken' }.to_json
     end
   
     begin
       # Attempt to create user
-      pw_hash = BCrypt::Password.create(password)
-
-      @db.execute("INSERT INTO user (username, email, pw_hash) VALUES (?, ?, ?)", 
-                  [username, email, pw_hash])
+      DatabaseHelper.new_user(username, email, password)
       
       # Assuming user insertion is successful
-      user_id = get_user_id(username)  # Retrieve the ID of the newly created user
+      user_id = DatabaseHelper.get_user_id(username)  # Retrieve the ID of the newly created user
       if user_id
         status 204
         { user_id: user_id, username: username, email: email }.to_json
@@ -124,10 +106,8 @@ class APIController < Sinatra::Base
 
 
     begin
-      query = "SELECT message.*, user.* FROM message, user
-        WHERE message.flagged = 0 AND message.author_id = user.user_id
-        ORDER BY message.pub_date DESC LIMIT ?"
-      msgs = @db.execute(query, [no ? no.to_i : 100]) #defaults no to 100
+      msgs = DatabaseHelper.get_messages([no ? no.to_i : 100])
+
 
       filtered_msgs = []
       msgs.each do |msg|
@@ -153,13 +133,10 @@ class APIController < Sinatra::Base
     
     no = params[:no]&.strip
     latest = params[:latest]&.strip
-    user_id = get_user_id(params[:username])
+    user_id = DatabaseHelper.get_user_id(params[:username])
 
     begin
-      query = "SELECT message.*, user.* FROM message, user
-        WHERE message.flagged = 0 AND message.author_id = user.user_id AND user.user_id = ?
-        ORDER BY message.pub_date DESC LIMIT ?"
-      msgs = @db.execute(query, [user_id, no.to_i])
+      msgs = DatabaseHelper.get_user_messages(user_id, no.to_i)
 
       filtered_msgs = []
       msgs.each do |msg|
@@ -186,12 +163,9 @@ class APIController < Sinatra::Base
     # Parse JSON body
     request_payload = JSON.parse(request.body.read) rescue {}
     content = request_payload["content"]&.strip
-    user_id = get_user_id(params[:username])
-
-    query = "INSERT INTO message (author_id, text, pub_date, flagged)
-                   VALUES (?, ?, ?, 0)"
-    
-    @db.execute(query, [user_id, content, Time.now.to_i])
+    user_id = DatabaseHelper.get_user_id(params[:username])
+    DatabaseHelper.new_message(user_id, content)
+    status 204
   end
 
   get '/api/fllws/:username' do
@@ -204,18 +178,13 @@ class APIController < Sinatra::Base
     end
 
     latest = params[:latest]
-    user_id = get_user_id(params[:username])
+    user_id = DatabaseHelper.get_user_id(params[:username])
 
     request_payload = JSON.parse(request.body.read) rescue {}
     no = request_payload["content"]&.strip
 
 
-    query = "SELECT user.username FROM user
-                   INNER JOIN follower ON follower.whom_id=user.user_id
-                   WHERE follower.who_id=?
-                   LIMIT ?"
-
-    followers = @db.execute(query, [user_id, no ? no.to_i : 100]) #if no was not set default to 100
+    followers = DatabaseHelper.get_followees_username(user_id, no ? no.to_i : 100) #if no was not set default to 100
     follower_names = followers.map { |e| e["username"] }
     followers_response = {"follows": follower_names}
     followers_response.to_json
@@ -230,7 +199,7 @@ class APIController < Sinatra::Base
       return not_from_sim_response
     end
 
-    user_id = get_user_id(params[:username])
+    user_id = DatabaseHelper.get_user_id(params[:username])
     if user_id.nil?
       halt 404
     end
@@ -238,17 +207,19 @@ class APIController < Sinatra::Base
     request_payload = JSON.parse(request.body.read) rescue {}
 
     if request_payload.key?("follow") 
-      query = "INSERT INTO follower (who_id, whom_id) VALUES (?, ?)"
-      fllw_id = get_user_id(request_payload["follow"]&.strip)
+      fllw_id = DatabaseHelper.get_user_id(request_payload["follow"]&.strip)
+      if fllw_id.nil?
+        halt 404
+      end
+      DatabaseHelper.follow(user_id, fllw_id)
     elsif request_payload.key?("unfollow")
-      query = "DELETE FROM follower WHERE who_id=? and WHOM_ID=?"
-      fllw_id = get_user_id(request_payload["unfollow"]&.strip)
+      fllw_id = DatabaseHelper.get_user_id(request_payload["unfollow"]&.strip)
+      if fllw_id.nil?
+        halt 404
+      end
+      DatabaseHelper.unfollow(user_id,  fllw_id)
     end
-    
-    if fllw_id.nil?
-      halt 404
-    end
+
     status 204
-    @db.execute(query, [user_id, fllw_id])
   end
 end

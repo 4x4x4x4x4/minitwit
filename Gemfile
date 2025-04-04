@@ -1,9 +1,10 @@
 source 'https://rubygems.org'
 
 gem 'sinatra'
+gem 'sequel'
 gem 'sqlite3'
 gem 'bcrypt'
 gem 'rack'
 gem 'puma'
 gem 'rackup'
-gem 'rubocop', require: false
+gem 'rubocop'
