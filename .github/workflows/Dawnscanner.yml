@@ -25,5 +25,10 @@ jobs:
         run: gem list | grep dawnscanner
 
       - name: Run Dawnscanner
-        run: |
-          dawn scan target
+        run: dawn scan .
+
+      - name: Upload Dawnscanner Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: dawnscanner-report
+          path: dawnscanner_report.txt
