@@ -46,13 +46,13 @@ module DatabaseHelper
   end
 
   def self.get_user_timeline(user_id, no_messages)
-    followees = get_followers(user_id)
+    followee_ids = get_followee_ids(user_id)
     Message
       .join(:user, user_id: :author_id)
       .where(flagged: 0)
       .where{
         (author_id == user_id) | 
-        (author_id =~ followees)
+        (followee_ids.has_key?(author_id))
       }
       .order(Sequel.desc(:pub_date))
       .limit(no_messages)
@@ -71,7 +71,7 @@ module DatabaseHelper
     Follower.where(who_id: follower, whom_id: followee).delete
   end
 
-  def self.get_followers(user_id)
-    Follower.where(who_id: user_id).all
+  def self.get_followee_ids(user_id)
+    Follower.where(who_id: user_id).as_hash(:whom_id)
   end
 end

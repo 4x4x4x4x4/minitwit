@@ -1,19 +1,19 @@
 <% if @user %>
   <% if @profile_user %>
     <div class="followstatus">
-      <% if @user[:user_id] == @profile_user[:user_id] %>
+      <% if @user.user_id == @profile_user.user_id %>
         This is you!
       <% elsif @followed %>
         You are currently following this user.
-        <a class="unfollow" href="<%= url("/#{@profile_user[:username]}/unfollow") %>">Unfollow user</a>.
+        <a class="unfollow" href="<%= url("/#{@profile_user.username}/unfollow") %>">Unfollow user</a>.
       <% else %>
         You are not yet following this user.
-        <a class="follow" href="<%= url("/#{@profile_user[:username]}/follow") %>">Follow user</a>.
+        <a class="follow" href="<%= url("/#{@profile_user.username}/follow") %>">Follow user</a>.
       <% end %>
     </div>
   <% elsif request.path_info == '/' %>
     <div class="twitbox">
-      <h3>What's on your mind, <%= @user[:username] %>?</h3>
+      <h3>What's on your mind, <%= @user.username %>?</h3>
       <form action="<%= url('/add_message') %>" method="post">
         <p><input type="text" name="text" size="60">
         <input type="submit" value="Share">

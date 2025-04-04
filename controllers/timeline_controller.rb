@@ -9,19 +9,22 @@ class TimelineController < Sinatra::Base
 
   set :views, File.expand_path('../../views', __FILE__)
 
+  before do
+    @user = current_user
+  end
+ 
   # Home / Timeline
   get '/' do
     redirect '/public' unless logged_in?
-
     @messages = DatabaseHelper.get_user_timeline(session[:user_id],30)
-
+    puts "hello"
     erb :timeline
   end
 
   # Public Timeline
   get '/public' do
     @messages = DatabaseHelper.get_messages(30)
-    erb :timeline #change view to use :email instead of 'email'
+    erb :timeline 
   end
 
   # Add a new message
