@@ -6,20 +6,24 @@ on:
       - ruboCop
 
 jobs:
-  security_scan:
+  dawnscanner:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Set up Ruby
+      - name: Set Up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.2'
 
-      - name: Install Dependencies
-        run: bundle install
+      - name: Install Dawnscanner
+        run: |
+          gem install dawnscanner --user-install
+          echo "$HOME/.local/share/gem/ruby/3.2.0/bin" >> $GITHUB_PATH
+
+      - name: Verify Dawnscanner Installation
+        run: gem list | grep dawnscanner
 
       - name: Run Dawnscanner
         run: |
