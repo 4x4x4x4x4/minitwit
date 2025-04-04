@@ -24,8 +24,10 @@ jobs:
       - name: Set Up Dawnscanner Knowledge Base
         run: |
           mkdir -p ~/.dawnscanner
-          git clone https://github.com/thesp0nge/dawnscanner.git ~/dawnscanner_repo
-          mv ~/dawnscanner_repo/kb ~/.dawnscanner/kb
+          curl -L -o dawnscanner_kb.zip https://github.com/thesp0nge/dawnscanner-knowledge-base/archive/refs/heads/main.zip
+          unzip dawnscanner_kb.zip
+          mv dawnscanner-knowledge-base-main/kb ~/.dawnscanner/kb
+      
 
       - name: Run Dawnscanner
         run: dawnscanner --format json > dawnscanner_report.json
