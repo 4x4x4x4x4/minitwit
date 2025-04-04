@@ -26,6 +26,7 @@ jobs:
           mkdir -p /home/runner/.dawnscanner/kb  # Create the folder for the knowledge base
           mv * /home/runner/.dawnscanner/kb/  # Move all extracted contents (check if kb.yaml is included)
           ls -l /home/runner/.dawnscanner/kb/  # Verify the move
+          pwd
 
 
       - name: Run Dawnscanner
