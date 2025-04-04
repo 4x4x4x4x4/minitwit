@@ -69,7 +69,7 @@ class APIController < Sinatra::Base
   
     # Check if username already exists
     if DatabaseHelper.get_user_id(username)
-      halt 409, { error: 'Username is already taken' }.to_json
+      halt 400, { error: 'Username is already taken' }.to_json
     end
   
     begin
@@ -164,7 +164,8 @@ class APIController < Sinatra::Base
     request_payload = JSON.parse(request.body.read) rescue {}
     content = request_payload["content"]&.strip
     user_id = DatabaseHelper.get_user_id(params[:username])
-    DatabaseHelper.new_message(user_id, content)   
+    DatabaseHelper.new_message(user_id, content)
+    status 204
   end
 
   get '/api/fllws/:username' do
