@@ -1,5 +1,4 @@
 name: Dawnscanner
-
 on:
   push:
     branches:
