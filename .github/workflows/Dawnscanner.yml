@@ -22,19 +22,21 @@ jobs:
       - name: Install Knowledge base and Run
         run: |
           curl -LO https://github.com/thesp0nge/dawnscanner_knowledge_base/releases/download/v20240116/kb.tar.gz
-          tar -xzf kb.tar.gz  
+          tar -xzf kb.tar.gz
           mkdir -p /home/runner/.dawnscanner/kb  # Create the folder for the knowledge base
-          mv * /home/runner/.dawnscanner/kb/  # Move all extracted contents (check if kb.yaml is included)
+          mv kb.yaml kb.yaml.sig /home/runner/.dawnscanner/kb/  # Move only relevant files
           
-          # Verify the contents of the knowledge base
+          # Set the knowledge base path
+          export DAWN_KB=/home/runner/.dawnscanner/kb
+          
+          # Verify contents
           ls -l /home/runner/.dawnscanner/kb/
           
-          # Move to the parent directory (where Gemfile.lock is)
-          cd ..
+          # Change to project directory
+          cd /home/runner/work/minitwit
           
-          # Verify that Gemfile.lock is present
-          pwd
-          ls -la
+          # Check if Gemfile.lock exists and is readable
+          ls -l Gemfile.lock
           
-          # Run dawn scan from the parent directory
-          dawn scan /home/runner/.dawnscanner/kb/
+          # Run the scan
+          dawn scan .
