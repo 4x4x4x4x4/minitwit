@@ -33,4 +33,5 @@ jobs:
           pwd
           ls -la  # List all files, including hidden ones
           ls -lR  # Recursively list all files and directories
-          dawn scan .
+          dawn scan ../
+
