@@ -1,0 +1,37 @@
+name: Dawnscanner
+
+on:
+  push:
+    branches:
+      - ruboCop
+
+jobs:
+  security_scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+
+      - name: Install Dependencies
+        run: bundle install
+
+      - name: Set Up Dawnscanner Knowledge Base
+        run: |
+          - mkdir -p ~/.dawnscanner
+          git clone https://github.com/thesp0nge/dawnscanner.git ~/dawnscanner_repo
+          mv ~/dawnscanner_repo/kb ~/.dawnscanner/kb
+
+      - name: Run Dawnscanner
+        run: dawnscanner --format json > dawnscanner_report.json
+
+      - name: Upload Dawnscanner Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: dawnscanner-report
+          path: dawnscanner_report.json
