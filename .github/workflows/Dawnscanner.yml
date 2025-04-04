@@ -19,5 +19,11 @@ jobs:
       - name: Install Dependencies
         run: bundle install
 
+      - name: Install Knowledge base
+        run: |
+          curl -LO https://github.com/thesp0nge/dawnscanner_knowledge_base/releases/download/v20240116/kb.tar.gz
+          tar -xzf kb.tar.gz
+
+
       - name: Run Dawnscanner
         run: dawn scan .
