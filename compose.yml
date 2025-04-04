@@ -2,10 +2,15 @@ services:
   frontend:
     build: 
       context: .
-      dockerfile: docker/Dockerfile
+      dockerfile: docker/Dockerfile_app
     image: minitwit/webapp
     ports: 
-      - "5001:5000"
+      - "80:5000"
     volumes:
       - .:/app
-
+  database:
+    build:
+      dockerfile: docker/Dockerfile_database
+    image: minitwit/database
+    ports:
+      - "5432:5432"
