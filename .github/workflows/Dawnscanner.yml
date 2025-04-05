@@ -35,15 +35,13 @@ jobs:
           ls -l /home/runner/.dawnscanner/kb/
           
           echo "2. -----------------------------------"
-          
-      
           ls -l 
           
 
       - name: Run Dawnscanner
         run: |
           # Change to project directory
-          cd /home/runner/work/minitwit/minitwit
+          cd /home/runner/.dawnscanner/kb/
           ls -l
           echo "3. -----------------------------------"
-          dawn scan .
+          dawn scan ../../work/minitwit/minitwit/.
