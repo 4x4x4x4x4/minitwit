@@ -40,8 +40,15 @@ jobs:
 
       - name: Run Dawnscanner
         run: |
-          # Change to project directory
-          cd /home/runner/.dawnscanner/kb/
-          ls -l
-          echo "3. -----------------------------------"
-          dawn scan ../../work/minitwit/minitwit/.
+          # Set path to Knowledge Base
+          export DAWN_KB=/home/runner/.dawnscanner/kb
+
+          # Change to your project directory
+          cd /home/runner/work/minitwit/minitwit/
+
+          ls -l  # Sanity check: should see Gemfile, Gemfile.lock
+
+          echo "3. ----------------------------------- Running Dawn Scanner"
+
+          dawn scan .
+      
