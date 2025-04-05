@@ -1,9 +1,10 @@
 name: Dawnscanner
 
 on:
+  pull_request:
   push:
     branches:
-      - ruboCop
+      - ConvertToRuby
 
 jobs:
   dawnscanner:
