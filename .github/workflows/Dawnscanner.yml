@@ -38,10 +38,8 @@ jobs:
           # Change to project directory
           cd /home/runner/work/minitwit
           
-          ls -l Gemfile.lock
+          ls -l 
           
-          # Run the scan
-          dawn scan .
 
       - name: Run Dawnscanner
         run: |
