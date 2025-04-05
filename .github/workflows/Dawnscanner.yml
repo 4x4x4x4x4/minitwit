@@ -1,4 +1,5 @@
 name: Dawnscanner
+
 on:
   push:
     branches:
@@ -7,6 +8,7 @@ on:
 jobs:
   dawnscanner:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -19,36 +21,26 @@ jobs:
       - name: Install Dependencies
         run: bundle install
 
-      - name: Install Knowledge base and Run
+      - name: Install Knowledge base
         run: |
-          ls -l
           curl -LO https://github.com/thesp0nge/dawnscanner_knowledge_base/releases/download/v20240116/kb.tar.gz
           tar -xzf kb.tar.gz
-          mkdir -p /home/runner/dawnscanner/kb  # Create the folder for the knowledge base
+          mkdir -p /home/runner/dawnscanner/kb
           mv bulletin generic_check owasp_ror_cheatsheet kb.yaml kb.yaml.sig /home/runner/dawnscanner/kb/
-          ls -l
-          echo "1. -----------------------------------"
-          # Set the knowledge base path
-          # export DAWN_KB=/home/runner/dawnscanner/kb
-          
-          # Verify contents
-          ls -l /home/runner/dawnscanner/kb/
-          
-          echo "2. -----------------------------------"
-          ls -l 
-          
 
       - name: Run Dawnscanner
         run: |
-          # Set path to Knowledge Base
+          # Set Knowledge Base path
           export DAWN_KB=/home/runner/dawnscanner/kb
 
-          # Change to your project directory
+          # Move to project directory
           cd /home/runner/work/minitwit/minitwit/
 
-          ls -l  # Sanity check: should see Gemfile, Gemfile.lock
+          echo "----------------------------------- Running Dawn Scanner"
 
-          echo "3. ----------------------------------- Running Dawn Scanner"
-
+          # Run the scan
           dawn scan .
-      
+
+          echo "----------------------------------- Scan Summary Output"
+          cat /home/runner/dawnscanner/results/$(date +%Y%m%d)/summary.txt
+          echo "----------------------------------- End of Dawn Scanner Output"
