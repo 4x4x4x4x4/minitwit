@@ -25,7 +25,7 @@ jobs:
           curl -LO https://github.com/thesp0nge/dawnscanner_knowledge_base/releases/download/v20240116/kb.tar.gz
           tar -xzf kb.tar.gz
           mkdir -p /home/runner/dawnscanner/kb  # Create the folder for the knowledge base
-          mv kb.yaml kb.yaml.sig /home/runner/dawnscanner/kb/  # Move only relevant files
+          mv bulletin generic_check owasp_ror_cheatsheet kb.yaml kb.yaml.sig /home/runner/dawnscanner/kb/
           ls -l
           echo "1. -----------------------------------"
           # Set the knowledge base path
