@@ -21,6 +21,7 @@ jobs:
 
       - name: Install Knowledge base and Run
         run: |
+          ls -l
           curl -LO https://github.com/thesp0nge/dawnscanner_knowledge_base/releases/download/v20240116/kb.tar.gz
           tar -xzf kb.tar.gz
           mkdir -p /home/runner/.dawnscanner/kb  # Create the folder for the knowledge base
