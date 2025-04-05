@@ -1,4 +1,5 @@
 name: Dawnscanner
+
 on:
   push:
     branches:
@@ -7,6 +8,7 @@ on:
 jobs:
   dawnscanner:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -16,28 +18,25 @@ jobs:
         with:
           ruby-version: '3.2'
 
-      - name: Install Dependencies
-        run: bundle install
-
-      - name: Install Knowledge base and Run
+      - name: Download and Set Up Knowledge Base
         run: |
-          ls -l
+          echo "Downloading DawnScanner Knowledge Base..."
           curl -LO https://github.com/thesp0nge/dawnscanner_knowledge_base/releases/download/v20240116/kb.tar.gz
           tar -xzf kb.tar.gz
-          mkdir -p /home/runner/.dawnscanner/kb  # Create the folder for the knowledge base
-          mv kb.yaml kb.yaml.sig /home/runner/.dawnscanner/kb/  # Move only relevant files
+          mkdir -p /home/runner/.dawnscanner/kb
+          mv kb.yaml kb.yaml.sig /home/runner/.dawnscanner/kb/
           
-          # Set the knowledge base path
-          export DAWN_KB=/home/runner/.dawnscanner/kb
-          
-          # Verify contents
+          echo "Verifying Knowledge Base..."
           ls -l /home/runner/.dawnscanner/kb/
-          
-          # Change to project directory
-          cd /home/runner/work/minitwit
-          
-          # Check if Gemfile.lock exists and is readable
-          ls -l Gemfile.lock
-          
-          # Run the scan
+
+      - name: Install Dependencies
+        run: |
+          bundle install
+          ls -l Gemfile.lock  # Verify that Gemfile.lock exists after install
+
+      - name: Run DawnScanner
+        run: |
+          export DAWN_KB=/home/runner/.dawnscanner/kb
+          ls -l
+          echo "Running DawnScanner..."
           dawn scan .
