@@ -1,0 +1,47 @@
+name: Dawnscanner
+
+on:
+  pull_request:
+  push:
+    branches:
+      - ConvertToRuby
+
+jobs:
+  dawnscanner:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set Up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+
+      - name: Install Dependencies
+        run: bundle install
+
+      - name: Install Knowledge base
+        run: |
+          curl -LO https://github.com/thesp0nge/dawnscanner_knowledge_base/releases/download/v20240116/kb.tar.gz
+          tar -xzf kb.tar.gz
+          mkdir -p /home/runner/dawnscanner/kb
+          mv bulletin generic_check owasp_ror_cheatsheet kb.yaml kb.yaml.sig /home/runner/dawnscanner/kb/
+
+      - name: Run Dawnscanner
+        run: |
+          # Set Knowledge Base path
+          export DAWN_KB=/home/runner/dawnscanner/kb
+
+          # Move to project directory
+          cd /home/runner/work/minitwit/minitwit/
+
+          echo "----------------------------------- Running Dawn Scanner"
+
+          # Run the scan
+          dawn scan .
+
+          echo "----------------------------------- Scan Summary Output"
+          cat /home/runner/dawnscanner/results/$(date +%Y%m%d)/summary.txt
+          echo "----------------------------------- End of Dawn Scanner Output"

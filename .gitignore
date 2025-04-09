@@ -1,6 +1,10 @@
 # Created by https://www.toptal.com/developers/gitignore/api/jetbrains,visualstudiocode,ruby,python
 # Edit at https://www.toptal.com/developers/gitignore?templates=jetbrains,visualstudiocode,ruby,python
 
+# vagrant
+.vagrant/
+
+
 ### JetBrains ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
@@ -11,6 +15,9 @@
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+
+#general jetbrains shiit
+.idea/
 
 # AWS User-specific
 .idea/**/aws.xml
@@ -298,6 +305,7 @@ pyrightconfig.json
 /test/tmp/
 /test/version_tmp/
 /tmp/
+Gemfile.lock
 
 # Used by dotenv library to load environment variables.
 # .env
