@@ -50,10 +50,8 @@ jobs:
         run: |
           docker compose up -d
 
-      - name: Install Ruby and rspec
+      - name: Install rspec
         run: |
-          sudo apt-get update
-          sudo apt-get install -y ruby-full
           gem install rspec
 
       - name: Run tests with rspec
