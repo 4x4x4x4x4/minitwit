@@ -1,0 +1,24 @@
+name: Fasterer
+on:
+  pull_request:
+  push:
+    branches:
+      - ConvertToRuby
+
+jobs:
+  Fasterer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+
+      - name: Install Dependencies
+        run: bundle install
+
+      - name: Run fasterer
+        run: fasterer

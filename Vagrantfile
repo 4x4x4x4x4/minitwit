@@ -17,9 +17,10 @@ Vagrant.configure("2") do |config|
       provider.ssh_key_name = ENV["SSH_KEY_NAME"]
       provider.token = ENV["DIGITAL_OCEAN_TOKEN"]
       provider.image = "ubuntu-22-04-x64"
-      provider.region = "nyc3"
+      provider.region = "fra1"
       provider.size = "s-1vcpu-1gb"
       provider.privatenetworking = true
+      provider.floating_ip = "64.225.93.206"
     end
 
     db.vm.hostname = "dbserver"
@@ -47,7 +48,7 @@ Vagrant.configure("2") do |config|
       provider.ssh_key_name = ENV["SSH_KEY_NAME"]
       provider.token = ENV["DIGITAL_OCEAN_TOKEN"]
       provider.image = "ubuntu-22-04-x64"
-      provider.region = "nyc3"
+      provider.region = "fra1"
       provider.size = "s-1vcpu-1gb"
       provider.privatenetworking = true
     end
