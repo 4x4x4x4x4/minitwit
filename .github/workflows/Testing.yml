@@ -52,7 +52,7 @@ jobs:
 
       - name: Install rspec
         run: |
-          gem install rspec
+          sudo gem install rspec
 
       - name: Run tests with rspec
         run: |
