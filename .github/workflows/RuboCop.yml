@@ -1,10 +1,10 @@
-name: Linting
+name: RuboCop
 
 on:
   pull_request:
   push:
     branches:
-      - ConvertToRuby
+      - develop
 
 jobs:
   rubocop:

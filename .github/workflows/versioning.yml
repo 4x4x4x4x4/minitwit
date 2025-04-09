@@ -3,7 +3,7 @@ name: Auto Versioning
 on:
   push:
     branches:
-      - ConvertToRuby  # Trigger only on this branch
+      - main
 
 jobs:
   version:
