@@ -48,7 +48,7 @@ jobs:
 
       - name: Build and start services with Docker Compose
         run: |
-          docker compose up --build
+          docker compose up -d
 
       - name: Run tests with rspec
         run: |
