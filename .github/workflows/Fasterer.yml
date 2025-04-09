@@ -21,4 +21,6 @@ jobs:
         run: bundle install
 
       - name: Run fasterer
-        run: fasterer
+        run: |
+          cd src/
+          fasterer
