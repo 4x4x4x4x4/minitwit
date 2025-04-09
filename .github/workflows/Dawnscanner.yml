@@ -20,7 +20,9 @@ jobs:
           ruby-version: '3.2'
 
       - name: Install Dependencies
-        run: bundle install
+        run: |
+          cd src/
+          bundle install
 
       - name: Install Knowledge base
         run: |
@@ -40,7 +42,7 @@ jobs:
           echo "----------------------------------- Running Dawn Scanner"
 
           # Run the scan
-          dawn scan src/
+          dawn scan .
 
           echo "----------------------------------- Scan Summary Output"
           cat /home/runner/dawnscanner/results/$(date +%Y%m%d)/summary.txt
