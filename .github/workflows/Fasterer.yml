@@ -3,7 +3,7 @@ on:
   pull_request:
   push:
     branches:
-      - fasterer-workflow
+      - ConvertToRuby
 
 jobs:
   Fasterer:
