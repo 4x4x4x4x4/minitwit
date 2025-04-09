@@ -1,0 +1,61 @@
+name: Testing
+
+on:
+  push:
+    branches:
+      - workflow-update
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Clean up Docker packages
+        run: |
+          sudo apt-get remove --purge docker docker-engine docker.io containerd containerd.io
+          sudo apt-get autoremove -y
+          sudo apt-get clean
+
+      - name: Install Docker
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            apt-transport-https \
+            ca-certificates \
+            curl \
+            software-properties-common
+          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo tee /etc/apt/trusted.gpg.d/docker.asc
+          sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+          sudo apt-get update
+          sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+          sudo systemctl start docker
+          sudo systemctl enable docker
+
+      - name: Get latest Docker Compose version
+        id: compose_version
+        run: |
+         echo "version=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | jq -r .tag_name | sed 's/v//')" >> $GITHUB_OUTPUT
+
+      - name: Set up Docker Compose
+        run: |
+          curl -L https://github.com/docker/compose/releases/download/v${{ steps.compose_version.outputs.version }}/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+          docker-compose --version
+
+      - name: Build and start services with Docker Compose
+        run: |
+          docker-compose up -d  # Start services in detached mode
+
+      - name: Run tests with rspec
+        run: |
+          rspec spec/minitwit_spec.rb
+        env:
+          FRONTEND_URL: "http://localhost:5001"  # URL of your Sinatra app running in Docker
+          RACK_ENV: test  # Set environment variable for Sinatra app if needed
+
+      - name: Stop and remove Docker containers
+        run: |
+          docker-compose down
