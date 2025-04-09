@@ -42,7 +42,7 @@ jobs:
           echo "----------------------------------- Running Dawn Scanner"
 
           # Run the scan
-          dawn scan .
+          dawn scan ../
 
           echo "----------------------------------- Scan Summary Output"
           cat /home/runner/dawnscanner/results/$(date +%Y%m%d)/summary.txt
