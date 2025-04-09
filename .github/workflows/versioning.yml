@@ -3,7 +3,7 @@ name: Auto Versioning
 on:
   push:
     branches:
-      - main
+      - develop
 
 jobs:
   version:
