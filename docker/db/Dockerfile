@@ -1,0 +1,6 @@
+FROM postgres
+
+
+ENV POSTGRES_PASSWORD=knowledge
+
+EXPOSE 5432

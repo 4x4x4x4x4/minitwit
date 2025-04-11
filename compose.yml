@@ -8,4 +8,25 @@ services:
       - "80:5000"
     volumes:
       - .:/app
-
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      db_IP: db
+      db_password: knowledge
+      db_name: minitwit_db
+  db: 
+    build: 
+      dockerfile: docker/db/Dockerfile 
+    image: minitwit/db
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: knowledge
+      POSTGRES_DB: minitwit_db
