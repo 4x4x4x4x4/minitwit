@@ -7,6 +7,10 @@ jobs:
   Deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Show Current Working Directory
+        run: pwd
+
+
       - name: Build Docker Images
         run: docker compose build
 
