@@ -20,7 +20,9 @@ jobs:
         run: echo "${{ secrets.DOCKER_AT }}" | docker login -u "${{ vars.DOCKER_USERNAME }}" --password-stdin
 
       - name: Push Docker Image
-        run: docker compose push
+        run: |
+          docker push ${{ vars.DOCKER_USERNAME }}/minitwit-db:latest
+          docker push ${{ vars.DOCKER_USERNAME }}/minitwit-webapp:latest
 
       - name: SSH into Server and Pull Latest Image
         uses: appleboy/ssh-action@v0.1.10
