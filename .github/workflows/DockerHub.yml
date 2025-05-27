@@ -31,7 +31,7 @@ jobs:
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ vars.TEST_DB }}
-          username: ${{ vars.DB_USER }}
+          username: root
           key: ${{ secrets.SSH_KEY_PRIVATE }}
           script: |
             docker pull ${{ vars.DOCKER_USERNAME }}/minitwit-db:latest
