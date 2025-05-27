@@ -1,6 +1,11 @@
 require 'sequel'
 
-DB = Sequel.sqlite('database/minitwit.db')
+DB = Sequel.connect(
+  adapter: 'postgres', 
+  host: ENV['db_IP'], 
+  database: ENV['db_name'], 
+  user: 'postgres', 
+  password: ENV['db_password'])
 
 # Create 'user' table
 DB.create_table? :user do
