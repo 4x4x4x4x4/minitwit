@@ -16,7 +16,7 @@ jobs:
       - name: Build Docker Images
         run: | 
           docker compose build 
-          #docker tag minitwit/db ${{ vars.DOCKER_USERNAME }}/minitwit-db:latest
+          docker tag minitwit/db ${{ vars.DOCKER_USERNAME }}/minitwit-db:latest
           docker tag minitwit/webapp ${{ vars.DOCKER_USERNAME }}/minitwit-webapp:latest 
 
       - name: Login to Docker Hub
@@ -24,7 +24,7 @@ jobs:
 
       - name: Push Docker Image
         run: |
-          # docker push ${{ vars.DOCKER_USERNAME }}/minitwit-db:latest
+          docker push ${{ vars.DOCKER_USERNAME }}/minitwit-db:latest
           docker push ${{ vars.DOCKER_USERNAME }}/minitwit-webapp:latest
 
       - name: SSH into Server and Pull Latest Image
