@@ -7,11 +7,8 @@ jobs:
   Deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Build Docker Compose
-        run:
-          | 
-          ls 
-          docker compose up --build
+      - name: Build Docker Images
+        run: docker compose build
 
       - name: Login to Docker Hub
         run: echo "${{ secrets.DOCKER_AT }}" | docker login -u "${{ vars.DOCKER_USERNAME }}" --password-stdin
