@@ -49,7 +49,7 @@ jobs:
             docker stop $(docker ps -aq) 
             docker rm $(docker ps -aq) 
             docker pull ${{ vars.DOCKER_USERNAME }}/minitwit-db:latest
-            docker run -d -p "${{ vars.EXPOSED_PORT}}:${{ vars.TEST_PORT}}" -e "db_IP=${{vars.db_IP}}" -e "db_password=${{secrets.DB_PASSWORD}}" -e "db_name=${{vars.DB_NAME}}" "${{ vars.DOCKER_USERNAME }}/minitwit-db:latest"
+            docker run -d -p "${{ vars.EXPOSED_PORT}}:${{ vars.TEST_PORT}}" -e "db_IP=${{vars.TEST_DB}}" -e "db_password=${{secrets.DB_PASSWORD}}" -e "db_name=${{vars.DB_NAME}}" "${{ vars.DOCKER_USERNAME }}/minitwit-db:latest"
 
       - name: Test Deployment
         run: |
