@@ -10,9 +10,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Show Current Working Directory
-        run: ls -a
-
       - name: Build Docker Images
         run: | 
           docker compose build 
@@ -53,6 +50,7 @@ jobs:
 
       - name: Test Deployment
         run: |
+          sleep 10
           curl --fail http://${{ vars.TEST_WEB }} || exit 1
 
 
