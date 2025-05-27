@@ -34,8 +34,8 @@ jobs:
           username: root
           key: ${{ secrets.SSH_KEY_PRIVATE }}
           script: |
-            docker pull ${{ vars.DOCKER_USERNAME }}/minitwit-db:latest
-            docker run "${{ vars.DOCKER_USERNAME }}/minitwit-db:latest" -d -p "${{ vars.POSTGRES_PORT}}:${{ vars.POSTGRES_PORT}}" -e "POSTGRES_USER=${{vars.DB_USER}}" -e "POSTGRES_PASSWORD=${{secrets.DB_PASSWORD}}" -e "POSTGRES_DB=${{vars.DB_NAME}}"
+            docker pull ${{ vars.DOCKER_USERNAME }}/minitwit-db:anton
+            docker run "${{ vars.DOCKER_USERNAME }}/minitwit-db:anton" -d -p "${{ vars.POSTGRES_PORT}}:${{ vars.POSTGRES_PORT}}" -e "POSTGRES_USER=${{vars.DB_USER}}" -e "POSTGRES_PASSWORD=${{secrets.DB_PASSWORD}}" -e "POSTGRES_DB=${{vars.DB_NAME}}"
 
       - name: Test Deployment
         run: |
