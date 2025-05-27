@@ -4,7 +4,7 @@ ENV APP_HOME /app
 ENV network="host"
 WORKDIR $APP_HOME
 
-COPY . .
+COPY /src .
 
 RUN bundle install
 

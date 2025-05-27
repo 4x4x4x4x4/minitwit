@@ -7,10 +7,11 @@ services:
     ports: 
       - "80:5000"
     volumes:
-      - .:/app
+      - .:/src/app
   database:
     build:
       dockerfile: docker/Dockerfile_database
     image: minitwit/database
     ports:
       - "5432:5432"
+

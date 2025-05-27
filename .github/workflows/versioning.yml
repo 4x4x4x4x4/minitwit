@@ -3,7 +3,7 @@ name: Auto Versioning
 on:
   push:
     branches:
-      - ConvertToRuby  # Trigger only on this branch
+      - develop
 
 jobs:
   version:
@@ -23,7 +23,7 @@ jobs:
             new_version=$(echo $latest_tag | awk -F. '{print $1"."$2"."$3+1}')
           fi
           
-          # Add branch name to version (optional)
+          # Optionally add branch name to version if not on main
           branch_name="${GITHUB_REF##*/}"
           if [[ "$branch_name" != "main" ]]; then
             new_version="${new_version}-${branch_name}"
@@ -35,15 +35,17 @@ jobs:
       - name: Tag the new version
         run: |
           git tag $NEW_VERSION
-          git push origin $NEW_VERSION  # Push the tag to GitHub
+          # Delete the remote tag if it exists (ignore error if not found)
+          git push origin :$NEW_VERSION || true
+          # Push the new tag
+          git push origin $NEW_VERSION
 
       - name: Fetch tags to ensure the new tag is recognized
-        run: |
-          git fetch --tags  # Make sure the tag is fetched before creating the release
+        run: git fetch --tags
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ env.NEW_VERSION }}  # Specify the tag to use for the release
+          tag_name: ${{ env.NEW_VERSION }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
