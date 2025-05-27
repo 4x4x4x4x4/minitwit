@@ -7,9 +7,11 @@ jobs:
   Deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
       - name: Show Current Working Directory
         run: ls -a
-
 
       - name: Build Docker Images
         run: docker compose build
