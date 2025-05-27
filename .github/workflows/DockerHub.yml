@@ -34,8 +34,8 @@ jobs:
           username: root
           key: ${{ secrets.SSH_KEY_PRIVATE }}
           script: |
-            docker stop $(docker ps -aq) #bad practice
-            docker rm $(docker ps -aq) #bad practice
+            docker stop $(docker ps -aq) 
+            docker rm $(docker ps -aq) 
             docker pull ${{ vars.DOCKER_USERNAME }}/minitwit-db:latest
             docker run -d -p "${{ vars.POSTGRES_PORT}}:${{ vars.POSTGRES_PORT}}" -e "POSTGRES_USER=${{vars.DB_USER}}" -e "POSTGRES_PASSWORD=${{secrets.DB_PASSWORD}}" -e "POSTGRES_DB=${{vars.DB_NAME}}" "${{ vars.DOCKER_USERNAME }}/minitwit-db:latest"
 
