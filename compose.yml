@@ -1,11 +1,43 @@
+version: "3.8"
+
 services:
-  frontend:
-    build: 
+  webapp:
+    build:
       context: .
       dockerfile: docker/Dockerfile
-    image: minitwit/webapp
-    ports: 
-      - "80:5000"
-    volumes:
-      - .:/src/app
+    image: minitwit/webapp:latest
+    ports:
+      - "80:5000" 
+    environment:
+      DATABASE_URL: postgres://admin:secret@db:5432/minitwit
+    networks:
+      - minitwit
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+      update_config:
+        parallelism: 1
+        delay: 10s
 
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: minitwit
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: secret
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - minitwit
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+
+networks:
+  minitwit:
+
+volumes:
+  db-data:
