@@ -50,10 +50,6 @@ jobs:
             docker rm $(docker ps -aq) 
             docker pull ${{ vars.DOCKER_USERNAME }}/minitwit-db:latest
             docker run -d -p "${{ vars.EXPOSED_PORT}}:${{ vars.TEST_PORT}}" -e "db_IP=${{vars.db_IP}}" -e "db_password=${{secrets.DB_PASSWORD}}" -e "db_name=${{vars.DB_NAME}}" "${{ vars.DOCKER_USERNAME }}/minitwit-db:latest"
-      : db
-      db_password: knowledge
-      : minitwit_db
- 
 
       - name: Test Deployment
         run: |
