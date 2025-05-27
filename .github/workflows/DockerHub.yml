@@ -50,7 +50,7 @@ jobs:
 
       - name: Test Deployment
         run: |
-          sleep 10
+          sleep 5
           curl --fail http://${{ vars.TEST_WEB }} || exit 1
 
 
