@@ -1,0 +1,44 @@
+name: Deploy
+on:
+  pull_request:
+    branches: [develop]
+
+jobs:
+  Deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Show Current Working Directory
+        run: ls -a
+
+      - name: Build Docker Images
+        run: | 
+          docker compose build 
+          #docker tag minitwit/db ${{ vars.DOCKER_USERNAME }}/minitwit-db:latest
+          docker tag minitwit/webapp ${{ vars.DOCKER_USERNAME }}/minitwit-webapp:latest 
+
+      - name: Login to Docker Hub
+        run: echo "${{ secrets.DOCKER_AT }}" | docker login -u "${{ vars.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Push Docker Image
+        run: |
+          # docker push ${{ vars.DOCKER_USERNAME }}/minitwit-db:latest
+          docker push ${{ vars.DOCKER_USERNAME }}/minitwit-webapp:latest
+
+      - name: SSH into Server and Pull Latest Image
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ vars.TEST_DB }}
+          username: root
+          key: ${{ secrets.SSH_KEY_PRIVATE }}
+          script: |
+            docker pull ${{ vars.DOCKER_USERNAME }}/minitwit-db:anton
+            docker run "${{ vars.DOCKER_USERNAME }}/minitwit-db:anton" -d -p "${{ vars.POSTGRES_PORT}}:${{ vars.POSTGRES_PORT}}" -e "POSTGRES_USER=${{vars.DB_USER}}" -e "POSTGRES_PASSWORD=${{secrets.DB_PASSWORD}}" -e "POSTGRES_DB=${{vars.DB_NAME}}"
+
+      - name: Test Deployment
+        run: |
+          curl --fail http://${{ vars.TEST_WEB }} || exit 1
+
+
