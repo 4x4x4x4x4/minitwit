@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Show Current Working Directory
-        run: pwd
+        run: ls -a
 
 
       - name: Build Docker Images
