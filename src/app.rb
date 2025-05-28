@@ -8,10 +8,21 @@ require_relative 'helpers/view_helper'
 require_relative 'helpers/db_helper'
 require_relative 'db/sequel'
 
+require 'prometheus/client'
+require 'prometheus/middleware/exporter'
+require 'prometheus/middleware/collector'
+require_relative 'metrics_middleware'
+
 class MiniTwit < Sinatra::Base
-  # very important that this is loaded first 
+  # Apply MetricsMiddleware FIRST
+  use MetricsMiddleware
+
+  # Then Prometheus’ scraping and collection
+  use Prometheus::Middleware::Collector
+  use Prometheus::Middleware::Exporter, path: '/metrics'
+
+  # Then your app routes
   use Rack::Static, urls: ["/style.css"], root: File.expand_path('public', __dir__)
-  
   helpers AuthHelper
   helpers ViewHelper
   helpers DatabaseHelper
@@ -19,6 +30,7 @@ class MiniTwit < Sinatra::Base
   use APIController
   use AuthController
   use TimelineController
+
   get '/' do
     redirect '/public'
   end

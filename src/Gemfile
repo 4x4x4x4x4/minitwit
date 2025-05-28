@@ -16,3 +16,5 @@ gem 'http-cookie'
 gem 'rubocop'
 gem 'dawnscanner'
 gem 'fasterer'
+gem 'prometheus-client'
+

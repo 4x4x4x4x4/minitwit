@@ -1,3 +1,8 @@
+networks:
+  itu-minitwit-network:
+    external: false
+    name: itu-minitwit-network
+
 services:
   frontend:
     build: 
@@ -8,13 +13,20 @@ services:
       - "80:5000"
     volumes:
       - .:/src/app
+    networks:
+      - itu-minitwit-network
     depends_on:
       db:
         condition: service_healthy
+      grafana:
+        condition: service_started
+      prometheus:
+        condition: service_started
     environment:
       db_IP: db
       db_password: knowledge
       db_name: minitwit_db
+
   db: 
     build: 
       dockerfile: docker/db/Dockerfile 
@@ -30,3 +42,36 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: knowledge
       POSTGRES_DB: minitwit_db
+    networks:
+      - itu-minitwit-network
+    depends_on:
+      grafana:
+        condition: service_started
+      prometheus:
+        condition: service_started
+
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - itu-minitwit-network
+
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    networks:
+      - itu-minitwit-network
+
+volumes:
+  grafana-storage:
+
+

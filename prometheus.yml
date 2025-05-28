@@ -1,0 +1,26 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+  external_labels:
+    monitor: 'codelab-monitor'
+
+rule_files:
+  - 'prometheus.rules.yml'
+
+scrape_configs:
+  - job_name: 'minitwit_webapp'
+    static_configs:
+      - targets: ['frontend:5000']
+
+  - job_name: 'prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['prometheus:9090']
+
+  - job_name: 'itu-minittwit-app'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['frontend:5000']
+        labels:
+          group: 'production'
