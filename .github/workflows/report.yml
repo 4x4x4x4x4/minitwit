@@ -26,3 +26,9 @@ jobs:
         with:
           name: DevOpsReport
           path: report/build/BSc_group_p.pdf
+
+      - name: Commit built PDF
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "CI: update rendered report [skip ci]"
+          file_pattern: report/build/*.pdf
