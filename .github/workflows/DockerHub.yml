@@ -32,10 +32,11 @@ jobs:
           username: root
           key: ${{ secrets.SSH_KEY_PRIVATE }}
           script: |
-            docker stop $(docker ps -aq) 
-            docker rm $(docker ps -aq) 
+            docker stop $(docker ps -aq)
+            docker rm $(docker ps -aq)
+            docker volume create psql_bd_mount_volume
             docker pull ${{ vars.DOCKER_USERNAME }}/minitwit-db:latest
-            docker run -d -p "${{ vars.POSTGRES_PORT}}:${{ vars.POSTGRES_PORT}}" -e "POSTGRES_USER=${{vars.DB_USER}}" -e "POSTGRES_PASSWORD=${{secrets.DB_PASSWORD}}" -e "POSTGRES_DB=${{vars.DB_NAME}}" "${{ vars.DOCKER_USERNAME }}/minitwit-db:latest"
+            docker run -d -p "${{ vars.POSTGRES_PORT}}:${{ vars.POSTGRES_PORT}}" -e "POSTGRES_USER=${{vars.DB_USER}}" -e "POSTGRES_PASSWORD=${{secrets.DB_PASSWORD}}" -e "POSTGRES_DB=${{vars.DB_NAME}}" -v psql_bd_mount_volume:/var/lib/postgresql/data "${{ vars.DOCKER_USERNAME }}/minitwit-db:latest"
 
       - name: SSH into app-test-server and Pull Latest Image
         uses: appleboy/ssh-action@v0.1.10
