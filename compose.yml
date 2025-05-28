@@ -6,8 +6,6 @@ services:
     image: minitwit/webapp
     ports: 
       - "80:5000"
-    volumes:
-      - .:/src/app
     depends_on:
       db:
         condition: service_healthy
@@ -19,6 +17,8 @@ services:
     build: 
       dockerfile: docker/db/Dockerfile 
     image: minitwit/db
+    volumes:
+      - db_volume:/var/lib/postgres/data
     ports:
       - "5432:5432"
     healthcheck:
@@ -30,3 +30,10 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: knowledge
       POSTGRES_DB: minitwit_db
+
+networks:
+  default: 
+    driver: bridge
+
+volumes:
+  db_volume:
