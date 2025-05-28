@@ -1,7 +1,6 @@
 name: Deploy
 on:
   pull_request:
-  push:
     branches: [develop]
 
 jobs:
@@ -38,7 +37,7 @@ jobs:
             docker pull ${{ vars.DOCKER_USERNAME }}/minitwit-db:latest
             docker run -d -p "${{ vars.POSTGRES_PORT}}:${{ vars.POSTGRES_PORT}}" -e "POSTGRES_USER=${{vars.DB_USER}}" -e "POSTGRES_PASSWORD=${{secrets.DB_PASSWORD}}" -e "POSTGRES_DB=${{vars.DB_NAME}}" -v psql_bd_mount_volume:/var/lib/postgresql/data "${{ vars.DOCKER_USERNAME }}/minitwit-db:latest"
 
-      - name: SSH into app-test-server and Pull Latest Image
+      - name: SSH into app-test-server run migrations and start app
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ vars.TEST_WEB }}
@@ -48,7 +47,8 @@ jobs:
             docker stop $(docker ps -aq) 
             docker rm $(docker ps -aq) 
             docker pull ${{ vars.DOCKER_USERNAME }}/minitwit-webapp:latest
-            docker run -d -p "${{ vars.EXPOSED_PORT}}:${{ vars.TEST_PORT}}" -e "db_IP=${{vars.TEST_DB}}" -e "db_password=${{secrets.DB_PASSWORD}}" -e "db_name=${{vars.DB_NAME}}" "${{ vars.DOCKER_USERNAME }}/minitwit-webapp:latest"
+            docker run --rm -e "DATABASE_URL=postgres://postgres:${{ secrets.DB_PASSWORD }}@${{ vars.TEST_DB }}:5432/${{ vars.DB_NAME }}" ${{ vars.DOCKER_USERNAME }}/minitwit-webapp:latest sh -c "bundle exec sequel -m db/migrations \$DATABASE_URL"
+            docker run -d -p "${{ vars.EXPOSED_PORT}}:${{ vars.TEST_PORT}}" -e "db_IP=${{vars.TEST_DB}}" -e "db_password=${{secrets.DB_PASSWORD}}" -e "db_name=${{vars.DB_NAME}}" -v .:/app/src "${{ vars.DOCKER_USERNAME }}/minitwit-webapp:latest"
 
       - name: Test Deployment
         run: |
