@@ -1,6 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/jetbrains,visualstudiocode,ruby,python
 # Edit at https://www.toptal.com/developers/gitignore?templates=jetbrains,visualstudiocode,ruby,python
 
+.DS_Store
+Gemfile.lock
+
 # vagrant
 .vagrant/
 

@@ -1,0 +1,22 @@
+name: Build LaTeX Report
+
+on:
+  push:
+    paths:
+      - 'report/**'
+  workflow_dispatch:
+
+jobs:
+  build-pdf:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Compile LaTeX report
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: BSc_group_p.tex  # or main.tex
+          working_directory: report   # relative to repo root
+          output_directory: build     # output goes to report/build/
