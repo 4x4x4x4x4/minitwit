@@ -9,14 +9,19 @@ on:
 jobs:
   build-pdf:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Compile LaTeX report
         uses: xu-cheng/latex-action@v3
         with:
-          root_file: BSc_group_p.tex  # or main.tex
-          working_directory: report   # relative to repo root
-          output_directory: build     # output goes to report/build/
+          root_file: BSc_group_p.tex
+          working_directory: report
+          work_in_root_file_dir: true
+          args: -pdf -file-line-error -halt-on-error -interaction=nonstopmode -output-directory=build
+
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: DevOpsReport
+          path: report/build/BSc_group_p.pdf
