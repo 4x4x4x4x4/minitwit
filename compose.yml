@@ -26,6 +26,8 @@ services:
       db_IP: db
       db_password: knowledge
       db_name: minitwit_db
+    #command: bash -c "bundle exec ruby app.rb -o 0.0.0.0"
+
 
   db: 
     build: 

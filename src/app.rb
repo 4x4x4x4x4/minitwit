@@ -1,39 +1,61 @@
 require 'sinatra/base'
 require 'sequel'
-require_relative 'controllers/auth_controller'
-require_relative 'controllers/timeline_controller'
-require_relative 'controllers/API_controller'
+require 'securerandom'
+require 'digest'
+require 'rack/utils'
+require 'prometheus/client'
+require 'prometheus/middleware/exporter'
+require 'prometheus/middleware/collector'
+
+# Helpers & DB
 require_relative 'helpers/auth_helper'
 require_relative 'helpers/view_helper'
 require_relative 'helpers/db_helper'
 require_relative 'db/sequel'
 
-require 'prometheus/client'
-require 'prometheus/middleware/exporter'
-require 'prometheus/middleware/collector'
+# Custom Middleware
 require_relative 'metrics_middleware'
 
-class MiniTwit < Sinatra::Base
-  # Apply MetricsMiddleware FIRST
-  use MetricsMiddleware
+# Controllers
+require_relative 'controllers/auth_controller'
+require_relative 'controllers/timeline_controller'
+require_relative 'controllers/API_controller'
 
-  # Then Prometheus’ scraping and collection
+class MiniTwit < Sinatra::Base
+  # 🔧 Prometheus Middleware
+  use MetricsMiddleware
   use Prometheus::Middleware::Collector
   use Prometheus::Middleware::Exporter, path: '/metrics'
 
-  # Then your app routes
-  use Rack::Static, urls: ["/style.css"], root: File.expand_path('public', __dir__)
+  # 🔧 Static files
+  use Rack::Static, urls: ["/style.css", "/js", "/images"], root: File.expand_path('public', __dir__)
+
+  # 🔧 App Config
+  configure do
+    set :environment, :production  # Optional: control environment-specific behavior
+    set :protection, allowed_hosts: ["localhost", "127.0.0.1", "minitwit", "app"]
+    set :public_folder, File.expand_path('public', __dir__)
+    set :views, File.join(root, 'views')
+    enable :static
+    enable :sessions
+    set :session_secret, ENV["SESSION_SECRET"] || SecureRandom.hex(64)
+  end
+
+  # 🔧 Include helper modules
   helpers AuthHelper
   helpers ViewHelper
   helpers DatabaseHelper
 
+  # 🧭 Route controllers
   use APIController
   use AuthController
   use TimelineController
 
+  # 🔁 Default root route (optional)
   get '/' do
     redirect '/public'
   end
 
+  # ▶️ App entry point
   run! if app_file == $0
 end
