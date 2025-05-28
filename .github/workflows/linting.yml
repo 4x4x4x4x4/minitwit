@@ -19,8 +19,10 @@ jobs:
           ruby-version: '3.2'
 
       - name: Install Dependencies
-        run: bundle install
+        run: |
+          cd src/
+          bundle install
 
       - name: Run RuboCop
-        run: bundle exec rubocop -A --autocorrect-all
+        run: rubocop -A --autocorrect-all
 

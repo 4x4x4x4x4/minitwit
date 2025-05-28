@@ -1,0 +1,58 @@
+name: Deploy
+on:
+  push:
+    branches: [main]
+
+jobs:
+  Deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker Images
+        run: | 
+          docker compose build 
+          docker tag minitwit/db ${{ vars.DOCKER_USERNAME }}/minitwit-db:latest
+          docker tag minitwit/webapp ${{ vars.DOCKER_USERNAME }}/minitwit-webapp:latest 
+
+      - name: Login to Docker Hub
+        run: echo "${{ secrets.DOCKER_AT }}" | docker login -u "${{ vars.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Push Docker Image
+        run: |
+          docker push ${{ vars.DOCKER_USERNAME }}/minitwit-db:latest
+          docker push ${{ vars.DOCKER_USERNAME }}/minitwit-webapp:latest
+
+      - name: SSH into DB-server and Pull Latest Image
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ vars.PROD_DB }}
+          username: root
+          key: ${{ secrets.SSH_KEY_PRIVATE }}
+          script: |
+            docker stop $(docker ps -aq)
+            docker rm $(docker ps -aq)
+            docker volume create psql_bd_mount_volume
+            docker pull ${{ vars.DOCKER_USERNAME }}/minitwit-db:latest
+            docker run -d -p "${{ vars.POSTGRES_PORT}}:${{ vars.POSTGRES_PORT}}" -e "POSTGRES_USER=${{vars.DB_USER}}" -e "POSTGRES_PASSWORD=${{secrets.DB_PASSWORD}}" -e "POSTGRES_DB=${{vars.DB_NAME}}" -v psql_bd_mount_volume:/var/lib/postgresql/data "${{ vars.DOCKER_USERNAME }}/minitwit-db:latest"
+
+      - name: SSH into app-server run migrations and start app
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ vars.PROD_WEB }}
+          username: root
+          key: ${{ secrets.SSH_KEY_PRIVATE }}
+          script: |
+            docker stop $(docker ps -aq) 
+            docker rm $(docker ps -aq) 
+            docker pull ${{ vars.DOCKER_USERNAME }}/minitwit-webapp:latest
+            docker run --rm -e "DATABASE_URL=postgres://postgres:${{ secrets.DB_PASSWORD }}@${{ vars.PROD_DB }}:5432/${{ vars.DB_NAME }}" ${{ vars.DOCKER_USERNAME }}/minitwit-webapp:latest sh -c "bundle exec sequel -m db/migrations \$DATABASE_URL"
+            docker run -d -p "${{ vars.EXPOSED_PORT}}:${{ vars.TEST_PORT}}" -e "db_IP=${{vars.PROD_DB}}" -e "db_password=${{secrets.DB_PASSWORD}}" -e "db_name=${{vars.DB_NAME}}" -v .:/app/src "${{ vars.DOCKER_USERNAME }}/minitwit-webapp:latest"
+
+      - name: Deployment
+        run: |
+          sleep 5
+          curl --fail http://${{ vars.PROD_WEB }} || exit 1
+
+
