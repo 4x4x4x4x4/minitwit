@@ -47,7 +47,7 @@ jobs:
             docker stop $(docker ps -aq) 
             docker rm $(docker ps -aq) 
             docker pull ${{ vars.DOCKER_USERNAME }}/minitwit-webapp:latest
-            docker run --rm -e "DATABASE_URL=postgres://postgres:${{ secrets.DB_PASSWORD }}@${{ vars.PROD_DB }}:5432/${{ vars.DB_NAME }}" ${{ vars.DOCKER_USERNAME }}/minitwit-webapp:latest sh -c "bundle exec sequel -m src/db/migrations \$DATABASE_URL"
+            docker run --rm -e "DATABASE_URL=postgres://postgres:${{ secrets.DB_PASSWORD }}@${{ vars.PROD_DB }}:5432/${{ vars.DB_NAME }}" ${{ vars.DOCKER_USERNAME }}/minitwit-webapp:latest sh -c "bundle exec sequel -m db/migrations \$DATABASE_URL"
             docker run -d -p "${{ vars.EXPOSED_PORT}}:${{ vars.TEST_PORT}}" -e "db_IP=${{vars.PROD_DB}}" -e "db_password=${{secrets.DB_PASSWORD}}" -e "db_name=${{vars.DB_NAME}}" -v .:/app/src "${{ vars.DOCKER_USERNAME }}/minitwit-webapp:latest"
 
       - name: Deployment
