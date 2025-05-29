@@ -25,11 +25,12 @@ services:
       db_password: knowledge
       db_name: minitwit_db
 
-
   db: 
     build: 
       dockerfile: docker/db/Dockerfile 
-    image: minitwit/db 
+   image: minitwit/db
+    volumes:
+      - db_volume:/var/lib/postgres/data
     ports:
       - "5432:5432"
     healthcheck:
@@ -58,7 +59,6 @@ services:
     networks:
       - itu-minitwit-network
 
-
   grafana:
     image: grafana/grafana
     ports:
@@ -72,4 +72,4 @@ services:
 
 volumes:
   grafana-storage:
-
+  db_volume:
