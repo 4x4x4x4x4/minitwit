@@ -28,7 +28,7 @@
   <% else %>
     <% @messages.each do |message| %>
       <li>
-        <img src="<%= gravatar(message[:email], size: 48) %>">
+        <img src="<%= gravatar(message[:email], size: 48) %>" alt="User Gravatar">
         <p>
           <strong>
             <a href="<%= url("/#{message[:username]}") %>">
