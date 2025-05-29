@@ -11,8 +11,6 @@ services:
     image: minitwit/webapp
     ports: 
       - "80:5000"
-    volumes:
-      - .:/src/app
     networks:
       - itu-minitwit-network
     depends_on:
@@ -26,13 +24,12 @@ services:
       db_IP: db
       db_password: knowledge
       db_name: minitwit_db
-    #command: bash -c "bundle exec ruby app.rb -o 0.0.0.0"
 
 
   db: 
     build: 
       dockerfile: docker/db/Dockerfile 
-    image: minitwit/db
+    image: minitwit/db 
     ports:
       - "5432:5432"
     healthcheck:
@@ -75,5 +72,4 @@ services:
 
 volumes:
   grafana-storage:
-
 

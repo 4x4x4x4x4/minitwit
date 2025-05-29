@@ -1,6 +1,6 @@
 require 'prometheus/client'
 
-class MetricsMiddleware
+class MetricsHelper
   def initialize(app)
     @app = app
     registry = Prometheus::Client.registry
