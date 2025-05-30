@@ -62,7 +62,7 @@ jobs:
         run: |
           docker-compose down
 
-  trigger_auto_versioning:
+  trigger_develop_staging:
     needs: test
     runs-on: ubuntu-latest
     steps:

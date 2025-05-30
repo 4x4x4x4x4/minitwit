@@ -48,7 +48,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
-  trigger_auto_versioning:
+  trigger_rspec_test:
     needs: version
     runs-on: ubuntu-latest
     steps:

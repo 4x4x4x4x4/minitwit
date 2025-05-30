@@ -4,7 +4,7 @@ on:
 
 
 jobs:
-  Deploy_develop_staging:
+  Deploy_prod_staging:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
