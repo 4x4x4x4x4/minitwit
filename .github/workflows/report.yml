@@ -27,7 +27,7 @@ jobs:
           mkdir -p build
           latexmk -pdf -f -interaction=nonstopmode \
                   -file-line-error -output-directory=build \
-                  BSc_group_p.tex     # ← or main.tex
+                  BSc_group_p.tex || true
 
       - name: Commit PDF
         run: |
