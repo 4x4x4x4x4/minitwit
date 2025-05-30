@@ -47,13 +47,13 @@ jobs:
         run: |
           docker compose up -d
 
-      - name: Install rspec
+      - name: Install Ruby Dependencies
         run: |
-          sudo gem install rspec
+          gem install bundler
+          bundle install 
 
       - name: Run tests with rspec
-        run: |
-          rspec ./spec/minitwit_spec.rb
+        run: bundle exec rspec ./spec/minitwit_spec.rb
         env:
           FRONTEND_URL: "http://localhost"
           RACK_ENV: test
