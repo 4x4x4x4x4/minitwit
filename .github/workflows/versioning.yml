@@ -46,4 +46,16 @@ jobs:
         with:
           tag_name: ${{ env.NEW_VERSION }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+
+  trigger_auto_versioning:
+    needs: version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Auto Versioning Workflow
+        run: |
+          curl -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: token ${{ secrets.PERSONAL_ACCESS_TOKEN }}" \
+            https://api.github.com/repos/${{ github.repository }}/actions/workflows/Testing.yml/dispatches\
+            -d '{"ref": "main"}'
