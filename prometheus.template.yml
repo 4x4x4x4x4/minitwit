@@ -11,7 +11,7 @@ rule_files:
 scrape_configs:
   - job_name: 'minitwit_webapp'
     static_configs:
-      - targets: ['localhost:5000']
+      - targets: ['${frontend_host}:${frontend_port}']
 
   - job_name: 'prometheus'
     scrape_interval: 5s
@@ -21,6 +21,6 @@ scrape_configs:
   - job_name: 'itu-minittwit-app'
     scrape_interval: 5s
     static_configs:
-      - targets: ['frontend:5000']
+      - targets: ['${frontend_host}:${frontend_port}']
         labels:
           group: 'production'

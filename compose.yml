@@ -24,11 +24,12 @@ services:
       db_IP: db
       db_password: knowledge
       db_name: minitwit_db
+      app_ip: localhost
 
   db: 
     build: 
       dockerfile: docker/db/Dockerfile 
-   image: minitwit/db
+    image: minitwit/db
     volumes:
       - db_volume:/var/lib/postgres/data
     ports:
@@ -51,13 +52,16 @@ services:
         condition: service_started
 
   prometheus:
-    image: prom/prometheus
+   image: prom/prometheus
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
       - "9090:9090"
     networks:
       - itu-minitwit-network
+    environment:
+      frontend_host: frontend
+      frontend_port: 5000
 
   grafana:
     image: grafana/grafana

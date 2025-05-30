@@ -29,12 +29,12 @@ class MiniTwit < Sinatra::Base
   # App Config
   configure do
     set :environment, :production  # Optional: control environment-specific behavior
-    set :protection, allowed_hosts: ["localhost", "127.0.0.1", "minitwit", "app"]
-    set :public_folder, File.expand_path('public', __dir__)
-    set :views, File.join(root, 'views')
-    enable :static
-    enable :sessions
-    set :session_secret, ENV["SESSION_SECRET"] || SecureRandom.hex(64)
+    set :protection, allowed_hosts: [ENV['app_ip']]
+#    set :public_folder, File.expand_path('public', __dir__)
+#    set :views, File.join(root, 'views')
+#    enable :static
+#    enable :sessions
+#    set :session_secret, ENV["SESSION_SECRET"] || SecureRandom.hex(64)
   end
 
   # Include helper modules

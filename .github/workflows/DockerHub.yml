@@ -2,6 +2,13 @@ name: Deploy
 on:
   pull_request:
     branches: [main]
+strategy:
+  matrix:
+    env: [test, prod]
+      
+env:
+  FRONTEND_HOST: ${{ vars. }}
+  FRONTEND_PORT: ${{ vars.FRONTEND_PORT }}
 
 jobs:
   Deploy:
@@ -10,7 +17,10 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Build Docker Images
+       - name: build prometheus yml file
+        run: sed "s|{{frontend_host}}|${FRONTEND_HOST}|g; s|{{frontend_port}}|${FRONTEND_PORT}|g" prometheus.template.yml > prometheus.yml
+
+     - name: Build Docker Images
         run: | 
           docker compose build 
           docker tag minitwit/db ${{ vars.DOCKER_USERNAME }}/minitwit-db:latest
