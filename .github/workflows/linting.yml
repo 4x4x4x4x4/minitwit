@@ -7,7 +7,7 @@ on:
       - main
 
 jobs:
-  rubocop:
+  linting:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -57,14 +57,14 @@ jobs:
           cat /home/runner/dawnscanner/results/$(date +%Y%m%d)/summary.txt
           echo "----------------------------------- End of Dawn Scanner Output"
 
-trigger_auto_versioning:
-  needs: dawnscanner
-  runs-on: ubuntu-latest
-  steps:
-    - name: Trigger Auto Versioning Workflow
-      run: |
-        curl -X POST \
-          -H "Accept: application/vnd.github+json" \
-          -H "Authorization: token ${{ secrets.PERSONAL_ACCESS_TOKEN }}" \
-          https://api.github.com/repos/${{ github.repository }}/actions/workflows/versioning.yml/dispatches\
-          -d '{"ref": "main"}'
+  trigger_auto_versioning:
+    needs: linting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Auto Versioning Workflow
+        run: |
+          curl -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: token ${{ secrets.PERSONAL_ACCESS_TOKEN }}" \
+            https://api.github.com/repos/${{ github.repository }}/actions/workflows/versioning.yml/dispatches\
+            -d '{"ref": "main"}'
