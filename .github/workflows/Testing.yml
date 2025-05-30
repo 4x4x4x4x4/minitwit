@@ -47,16 +47,8 @@ jobs:
         run: |
           docker compose up -d
 
-      - name: Install Ruby Dependencies
-        run: |
-          sudo gem install bundler
-          sudo bundle install 
-
       - name: Run tests with rspec
-        run: bundle exec rspec ./spec/minitwit_spec.rb
-        env:
-          FRONTEND_URL: "http://localhost"
-          RACK_ENV: test
+        run: docker run --rm -e "FRONTEND_URL=http://localhost" -e "RACK_ENV=test" ${{ vars.DOCKER_USERNAME }}/minitwit-webapp:latest sh -c "bundle exec rspec ./spec/minitwit_spec.rb"
 
       - name: Stop and remove Docker containers
         run: |
