@@ -2,9 +2,8 @@ name: Linting
 
 on:
   pull_request:
-  push:
     branches:
-      - ConvertToRuby
+      - main
 
 jobs:
   rubocop:
