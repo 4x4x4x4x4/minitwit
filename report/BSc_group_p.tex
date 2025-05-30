@@ -1,0 +1,147 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{svg}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs} % For prettier tables
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage[shortlabels]{enumitem}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{subcaption}
+\usepackage{fancyhdr}
+\usepackage{float}  
+\usepackage{graphicx}
+\usepackage{mhchem}
+\graphicspath{ {./Figures/} }
+\usepackage{array}
+\usepackage{ragged2e}
+\usepackage{multirow}
+\usepackage{csquotes}
+\usepackage{natbib}
+
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}} % center the column and justify its contents to the top in multirow tables
+\newcolumntype{R}[1]{>{\RaggedLeft\arraybackslash}p{#1}} % Align column to the right in multirow tables
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+% --- set footer and header ---
+\renewcommand{\headrulewidth}{1pt}
+\renewcommand{\footrulewidth}{1pt}
+\pagestyle{fancy}
+\fancyhf{}
+
+\makeatletter\let\Title\@title\makeatother
+
+\lhead{\Title}
+\rfoot{\includegraphics[height=1cm]{images/logo_small.png}} % right header logo
+\setlength\headheight{16pt}
+\setlength{\footskip}{50pt}
+\lhead{\Title} %rightH title
+\cfoot{\thepage}
+% --- end footer and header ---
+
+%----------EDIT COVER INFO HERE -----------------%
+
+\def \LOGOPATH {images/ITU.svg}
+\def \DEPARTEMENT {IT University of Copenhagen}
+\def \COURSENUM {BSDSESM1KU}
+\def \COURSENAME {DevOps, Software Evolution and Software Maintenance}
+\def \REPORTTITLE {ITU-MiniTwit}
+\def \STUDENTNAME {
+    \begin{tabular}{@{}l@{\hspace{2em}}l}
+        \textbf{Prepared by:} & Anton Vadsholt \texttt{<avad@itu.dk>}
+        \\ & Atila Arianpour Wolff \texttt{<atia@itu.dk>}
+        \\ & Karl Gustav Løhr \texttt{<kagl@itu.dk>} 
+        \\ & Sebastian Graakjær Blok \texttt{<segb@itu.dk>}
+        \\ & Silas Willendrup Wolff \texttt{<siwo@itu.dk>}
+    \end{tabular}
+    \vspace{0.5cm}
+}
+
+
+
+
+% Make subsubsubsection
+\makeatletter
+\newcommand{\subsubsubsection}[1]{\paragraph{#1}\mbox{}\\}
+\makeatother
+
+% \documentclass{article}
+
+\usepackage{fancyhdr}
+\usepackage{lastpage} % <--- ADD THIS!
+
+\pagestyle{fancy}
+\fancyfoot[C]{Page \thepage\ of \pageref{LastPage}}
+
+\begin{document}
+
+% Title Page
+\begin{titlepage}
+    \vfill
+    \begin{center}
+        \includesvg[width=0.7\textwidth]{\LOGOPATH} \\
+        \hfill \\
+        \Large{\DEPARTEMENT} \\
+        \Large{\COURSENUM\;-\;\COURSENAME} \\
+        \vfill
+        \textbf{\LARGE{\REPORTTITLE}}
+    \end{center}
+    \vfill
+    \begin{flushleft}
+        \Large{\STUDENTNAME} \\
+        \Large{\INSTRUCTOR} \\
+    \end{flushleft}
+    \vfill
+    \begin{center}
+        \Large{\textbf{Date:} \today}
+    \end{center}
+\end{titlepage}
+
+%\newpage
+%\input{Sections/Abstract}
+
+\newpage
+\tableofcontents
+
+\newpage
+\include{Sections/System's Perspective}
+\include{Sections/Process' perspective}
+\include{Sections/Reflection Perspective}
+
+
+%\bibliographystyle{IEEEtran}
+%\cleardoublepage
+%\phantomsection
+%\addcontentsline{toc}{section}{References}
+%\bibliography{IEEEabrv,cites}
+
+
+\end{document}
