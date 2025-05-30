@@ -49,8 +49,8 @@ jobs:
 
       - name: Install Ruby Dependencies
         run: |
-          gem install bundler
-          bundle install 
+          sudo gem install bundler
+          sudo bundle install 
 
       - name: Run tests with rspec
         run: bundle exec rspec ./spec/minitwit_spec.rb
