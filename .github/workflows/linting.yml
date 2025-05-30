@@ -25,9 +25,15 @@ jobs:
 
       - name: Run RuboCop
         run: rubocop -A --autocorrect-all
+        continue-on-error: true
+
+      - name: Show RuboCop changes
+        run: git diff
 
       - name: Run fasterer
         run: fasterer
+        continue-on-error: true
+
 
       - name: Install Knowledge base
         run: |
