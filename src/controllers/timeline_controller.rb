@@ -2,12 +2,19 @@ require 'sinatra/base'
 require 'sqlite3'
 require_relative '../helpers/auth_helper'
 require_relative '../helpers/view_helper'
+require 'sinatra/custom_logger'
+require_relative '../helpers/log_helper'
 
 class TimelineController < Sinatra::Base
   helpers AuthHelper
   helpers ViewHelper
+  helpers Sinatra::CustomLogger
 
   set :views, File.expand_path('../../views', __FILE__)
+
+
+  log = LoggerSetup.build
+  set :logger, log
 
   before do
     @user = current_user
@@ -33,6 +40,9 @@ class TimelineController < Sinatra::Base
     if params[:text] && !params[:text].empty?
       DatabaseHelper.new_message(session[:user_id], params[:text])
       session[:success_message] = "Your message was recorded"
+      settings.logger.info "This is a custom log message."
+      settings.logger.error "Something went wrong"
+      settings.logger.warn "This is a warning"
     end    
     redirect '/'
   end

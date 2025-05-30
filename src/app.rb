@@ -9,12 +9,12 @@ require_relative 'helpers/db_helper'
 require_relative 'db/sequel'
 
 class MiniTwit < Sinatra::Base
-  # very important that this is loaded first 
-  use Rack::Static, urls: ["/style.css"], root: File.expand_path('public', __dir__)
-  
   helpers AuthHelper
   helpers ViewHelper
   helpers DatabaseHelper
+
+  # very important that this is loaded
+  use Rack::Static, urls: ["/style.css"], root: File.expand_path('public', __dir__)
 
   use APIController
   use AuthController
