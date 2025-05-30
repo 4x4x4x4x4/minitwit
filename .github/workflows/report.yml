@@ -1,0 +1,48 @@
+name: Build LaTeX Report
+
+on:
+  push:
+    paths: ['report/**']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with: {fetch-depth: 0}
+
+      - name: Install TeX Live + latexmk
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y texlive-latex-base latexmk
+
+      - name: Compile LaTeX to PDF
+        run: |
+          cd report
+          mkdir -p build
+          latexmk -pdf -interaction=nonstopmode -halt-on-error \
+                  -file-line-error -output-directory=build \
+                  BSc_group_p.tex     # ← or main.tex
+
+      - name: Commit PDF
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f report/build/BSc_group_p.pdf
+          # only commit if there are changes
+          if ! git diff --cached --quiet; then
+            git commit -m "CI: render report [skip ci]"
+            git push
+          else
+            echo "PDF unchanged – nothing to commit."
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: DevOpsReport
+          path: report/build/BSc_group_p.pdf
