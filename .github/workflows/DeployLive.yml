@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  Deploy:
+  Deploy_prod_staging:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository

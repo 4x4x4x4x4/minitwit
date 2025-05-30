@@ -4,7 +4,7 @@ on:
 
 
 jobs:
-  Deploy:
+  Deploy_develop_staging:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -59,7 +59,7 @@ jobs:
     needs: Deploy
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger Auto Versioning Workflow
+      - name: Trigger production staging
         run: |
           curl -X POST \
             -H "Accept: application/vnd.github+json" \
