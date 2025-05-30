@@ -26,3 +26,30 @@ jobs:
       - name: Run RuboCop
         run: rubocop -A --autocorrect-all
 
+      - name: Run fasterer
+        run: fasterer
+
+      - name: Install Knowledge base
+        run: |
+          curl -LO https://github.com/thesp0nge/dawnscanner_knowledge_base/releases/download/v20240116/kb.tar.gz
+          tar -xzf kb.tar.gz
+          mkdir -p /home/runner/dawnscanner/kb
+          mv bulletin generic_check owasp_ror_cheatsheet kb.yaml kb.yaml.sig /home/runner/dawnscanner/kb/
+
+      - name: Run Dawnscanner
+        run: |
+          # Set Knowledge Base path
+          export DAWN_KB=/home/runner/dawnscanner/kb
+
+          # Move to project directory
+          cd /home/runner/work/minitwit/minitwit/
+
+          echo "----------------------------------- Running Dawn Scanner"
+
+          # Run the scan
+          ls -l
+          dawn scan ../.
+
+          echo "----------------------------------- Scan Summary Output"
+          cat /home/runner/dawnscanner/results/$(date +%Y%m%d)/summary.txt
+          echo "----------------------------------- End of Dawn Scanner Output"
