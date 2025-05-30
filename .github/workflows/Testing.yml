@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  version:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -55,9 +55,21 @@ jobs:
         run: |
           rspec spec/minitwit_spec.rb
         env:
-          FRONTEND_URL: "http://localhost:5001"  # URL of your Sinatra app running in Docker
+          FRONTEND_URL: "http://localhost"  # URL of your Sinatra app running in Docker
           RACK_ENV: test  # Set environment variable for Sinatra app if needed
 
       - name: Stop and remove Docker containers
         run: |
           docker-compose down
+
+  trigger_auto_versioning:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Auto Versioning Workflow
+        run: |
+          curl -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: token ${{ secrets.PERSONAL_ACCESS_TOKEN }}" \
+            https://api.github.com/repos/${{ github.repository }}/actions/workflows/DeployTest.yml/dispatches\
+            -d '{"ref": "main"}'
