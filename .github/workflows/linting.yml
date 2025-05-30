@@ -25,11 +25,9 @@ jobs:
 
       - name: Run RuboCop
         run: rubocop -A
-        continue-on-error: true
 
       - name: Run fasterer
         run: fasterer
-        continue-on-error: true
 
 
       - name: Install Knowledge base
