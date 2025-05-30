@@ -53,7 +53,7 @@ jobs:
 
       - name: Run tests with rspec
         run: |
-          rspec spec/minitwit_spec.rb
+          rspec ./spec/minitwit_spec.rb
         env:
           FRONTEND_URL: "http://localhost"  # URL of your Sinatra app running in Docker
           RACK_ENV: test  # Set environment variable for Sinatra app if needed
