@@ -54,7 +54,7 @@ jobs:
 
           # Run the scan
           ls -l
-          dawn scan ../.
+          dawn scan ./src/.
 
           echo "----------------------------------- Scan Summary Output"
           cat /home/runner/dawnscanner/results/$(date +%Y%m%d)/summary.txt
